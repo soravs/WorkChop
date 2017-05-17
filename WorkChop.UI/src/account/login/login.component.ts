@@ -1,8 +1,7 @@
 ﻿import { Component, OnInit } from '@angular/core';
 import { Http, RequestOptions } from '@angular/http';
 import { Router } from '@angular/router';
-
-import { AuthenticationService } from '../../_services/authentication.service'
+import { AuthenticationService } from '../_services/authentication.service';
 
 @Component({
     selector: 'app-login-route',
@@ -30,22 +29,21 @@ export class LoginComponent implements OnInit {
 
     login() {
         debugger;
-        this._authenticationService.login(this.loginVM.username, this.loginVM.password)
+        this._authenticationService.login(this.loginVM.userName, this.loginVM.password)
             .subscribe(result => {
                 debugger;
                 if (result === true) {
-                     this._router.navigate(['home']);
+                     this._router.navigate(['/app/course']);
 
                 } else {
                     this.error = 'Username or password is incorrect';
                 }
             }, error => {
-                debugger;
                 this.error = error.json().Message;
             });
     }
 }
 
 export class LoginViewModel {
-    constructor(public username: string, public password: string) { }
+    constructor(public userName: string, public password: string) { }
 }

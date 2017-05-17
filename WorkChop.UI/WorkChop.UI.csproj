@@ -104,11 +104,14 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="protractor.conf.js" />
+    <Content Include="src\account\account.component.css" />
+    <Content Include="src\account\account.component.html" />
     <Content Include="src\app\app.component.css" />
     <Content Include="src\app\app.component.html" />
-    <Content Include="src\app\Home\Component\home.component.html" />
-    <Content Include="src\app\login\Component\login.component.css" />
-    <Content Include="src\app\login\Component\login.component.html" />
+    <Content Include="src\account\login\login.component.css" />
+    <Content Include="src\account\login\login.component.html" />
+    <Content Include="src\app\course-dashboard\course-dashboard.component.css" />
+    <Content Include="src\app\course-dashboard\course-dashboard.component.html" />
     <Content Include="src\assets\images\bar-graph-active.svg" />
     <Content Include="src\assets\images\bar-graph.png" />
     <Content Include="src\assets\images\bar-graph.svg" />
@@ -176,22 +179,25 @@
   <ItemGroup>
     <TypeScriptCompile Include="e2e\app.e2e-spec.ts" />
     <TypeScriptCompile Include="e2e\app.po.ts" />
+    <TypeScriptCompile Include="src\account\account-routing.module.ts" />
+    <TypeScriptCompile Include="src\account\account.component.ts" />
+    <TypeScriptCompile Include="src\account\account.module.ts" />
     <TypeScriptCompile Include="src\app\app-routing.module.ts" />
     <TypeScriptCompile Include="src\app\app.component.spec.ts" />
     <TypeScriptCompile Include="src\app\app.component.ts" />
     <TypeScriptCompile Include="src\app\app.module.ts" />
-    <TypeScriptCompile Include="src\app\Home\Component\home.component.ts" />
-    <TypeScriptCompile Include="src\app\Home\Model\Users.ts" />
-    <TypeScriptCompile Include="src\app\Home\Service\user.service.ts" />
-    <TypeScriptCompile Include="src\app\login\Component\login.component.ts" />
-    <TypeScriptCompile Include="src\app\login\Component\login.component.spec.ts" />
-    <TypeScriptCompile Include="src\app\_guards\auth.guard.ts" />
-    <TypeScriptCompile Include="src\app\_services\authentication.service.ts" />
-    <TypeScriptCompile Include="src\app\_services\index.ts" />
+    <TypeScriptCompile Include="src\account\login\login.component.ts" />
+    <TypeScriptCompile Include="src\account\_guards\auth.guard.ts" />
+    <TypeScriptCompile Include="src\account\_services\authentication.service.ts" />
+    <TypeScriptCompile Include="src\account\_services\index.ts" />
+    <TypeScriptCompile Include="src\app\course-dashboard\course-dashboard.component.ts" />
     <TypeScriptCompile Include="src\environments\environment.prod.ts" />
     <TypeScriptCompile Include="src\environments\environment.ts" />
     <TypeScriptCompile Include="src\main.ts" />
     <TypeScriptCompile Include="src\polyfills.ts" />
+    <TypeScriptCompile Include="src\root-routing.module.ts" />
+    <TypeScriptCompile Include="src\root.component.ts" />
+    <TypeScriptCompile Include="src\root.module.ts" />
     <TypeScriptCompile Include="src\test.ts" />
     <TypeScriptCompile Include="src\typings.d.ts" />
   </ItemGroup>

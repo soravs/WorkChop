@@ -20,7 +20,6 @@ export class AuthenticationService {
         let url = 'http://localhost:53027/api/User/SignIn';
         return this.http.post(url, body, options)
             .map((response: Response) => {
-                debugger;
                 // login successful if there's a jwt token in the response
                 let result = response.json();
                // let token = response.json() && response.json().TokenModel.access_token;
@@ -36,7 +35,6 @@ export class AuthenticationService {
                     return false;
                 }
             }, error => {
-                debugger;
             });
     }
 
