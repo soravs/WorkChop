@@ -1,0 +1,41 @@
+﻿<div class="row no-margin">
+    <div class="col-md-9 col-sm-9 col-xs-12 padding-0">
+        <img class="login-pic" src="../../../assets/images/Background_Login2.jpg" />
+        <div class="row no-margin">
+            <div class="col-md-12 col-sm-12 col-xs-12 login-text">
+                <div class="login-description-container">
+                    <p class="font-bold">YOUR</p>
+                    <p class="font-bold">TEACHING</p>
+                    <p class="font-bold">FLOW</p>
+                    <p class="font-bold">APPLICATION</p>
+                    <p class="font-bold diffcolor">workchop.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3 col-sm-3 col-xs-12 padding-0 login-detail text-center">
+        <img class="width-100 border-bottom" src="../../../assets/images/workchoplogo.png" />
+        <p class="login-sign-description"><span class="font-bold">Sign in</span> using your emailaddress and password.</p>
+        <div class="row no-margin">
+            <div class="col-sm-12">
+                <form name="form" (ngSubmit)="f.form.valid && login()" #f="ngForm" novalidate>
+                    <div class="form-group" [ngClass]="{ 'has-error': f.submitted && !username.valid }">
+                        <input type="text" class="form-control" placeholder="Enter your email address" name="username" [(ngModel)]="loginVM.username" #username="ngModel" required>
+                    </div>
+                    <div class="form-group"  [ngClass]="{ 'has-error': f.submitted && !password.valid }"> 
+                        <input type="password" class="form-control" placeholder="Enter your password" name="password" [(ngModel)]="loginVM.password" #password="ngModel" required >
+                    </div>
+                    <div class="form-group">
+                        <button class="btn btn-default btn-blue margin-bottom-15">SIGN IN</button>
+                    </div>
+                    <div *ngIf="error" class="alert alert-danger">{{error}}</div>
+                    <div class="form-group">
+                        <a class="forgot-password">Forgot your password?</a>
+                    </div>
+
+                </form>
+            </div>
+        </div>
+        <div class="footer-login">Visit <span class="font-bold">workchop.Be</span> for more information</div>
+    </div>
+</div>
