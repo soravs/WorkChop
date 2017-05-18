@@ -1,73 +1,39 @@
-#topbar {
-    background: #ffffff;
-    width: 100%;
-    height: 65px;
-    margin-bottom: 0px;
+.height-100px {
+    height: 100px;
 }
 
-    #topbar.navbar-default {
-        border: 0;
-    }
-
-    #topbar .topbar-main {
-        background: #fff;
-    }
-
-.main_logo_overview {
-    width: 200px;
-    padding: 13px;
-    padding-left: 20px;
+.height-100 {
+    height: 100vh;
 }
 
-#topbar .navbar-top-links li {
-    display: inline-block;
+#topbar .navbar-top-links li .dropdown-menu li a.updateandrelease {
+    padding-top: 0 !important;
+    padding-bottom: 30px !important;
 }
 
-    #topbar .navbar-top-links li > a {
-        /*padding: 27px 20px;*/
-        padding: 12px 20px;
-    }
-
-.top-bar-icon {
-    color: #bababa !important;
+.p-13-25 {
+    padding: 13px 25px !important;
 }
 
-    .top-bar-icon i {
-        color: #bababa !important;
-        font-size: 24px !important;
-        vertical-align: middle !important;
-    }
+.profile-pic {
+    color: #003261 !important;
+    font-size: 12px;
+    font-family: 'Roboto-Medium';
+}
 
-#topbar .navbar-top-links li .dropdown-menu {
-    padding: 0px;
-    min-width: 360px;
-    border-radius: 10px;
-    right: 15px;
+.login-dropdown .dropdown-menu:before {
+    position: absolute;
+    top: -11px;
     left: auto;
-    -webkit-box-shadow: 1px 1px 10px 1px rgba(0,0,0,0.25);
-    -o-box-shadow: 1px 1px 10px 1px rgba(0,0,0,0.25);
-    -ms-box-shadow: 1px 1px 10px 1px rgba(0,0,0,0.25);
-    -moz-box-shadow: 1px 1px 10px 1px rgba(0,0,0,0.25);
-    box-shadow: 1px 1px 10px 1px rgba(0,0,0,0.25);
-    border: none;
+    right: 15px;
+    display: inline-block;
+    border-right: 10px solid transparent;
+    border-bottom: 10px solid #fff;
+    border-left: 10px solid transparent;
+    border-bottom-color: rgba(0, 0, 0, 0.2);
+    border-bottom-color: #ddd;
+    content: '';
 }
-
-    #topbar .navbar-top-links li .dropdown-menu li {
-        display: block;
-    }
-
-        #topbar .navbar-top-links li .dropdown-menu li:last-child {
-            margin-right: 0;
-        }
-
-        #topbar .navbar-top-links li .dropdown-menu li a {
-            min-height: 0;
-            /*border-bottom: 1px solid #ddd;*/
-            color: #003261 !important;
-            padding: 18px 25px !important;
-            font-size: 12px;
-            font-family: 'Roboto-Medium';
-        }
 
 .login-dropdown .dropdown-menu:after {
     position: absolute;
@@ -81,23 +47,383 @@
     content: '';
 }
 
-div,
-span,
-a,
-input,
-iframe,
-textarea {
-    -webkit-box-sizing: border-box;
-    -moz-box-sizing: border-box;
-    box-sizing: border-box;
+.padding-left-0 {
+    padding-left: 0;
 }
 
-@media only screen and (max-width: 1520px) and (min-width: 1281px) {
-    #topbar .navbar-top-links li > a {
-        padding: 12px 20px;
+.clickable {
+    cursor: pointer;
+}
+
+.p-l-r-30 {
+    padding-left: 30px;
+    padding-right: 30px;
+}
+
+.course-page .dropdown-menu {
+    top: 15px;
+    left: auto;
+    right: 10px;
+    -webkit-box-shadow: 1px 1px 10px 1px rgba(0,0,0,0.25);
+    -o-box-shadow: 1px 1px 10px 1px rgba(0,0,0,0.25);
+    -ms-box-shadow: 1px 1px 10px 1px rgba(0,0,0,0.25);
+    -moz-box-shadow: 1px 1px 10px 1px rgba(0,0,0,0.25);
+    box-shadow: 1px 1px 10px 1px rgba(0,0,0,0.25);
+    border: none;
+    border-radius: 0;
+    min-width: 140px;
+    padding: 20px 15px;
+    z-index: 35;
+    text-align: center;
+    margin-bottom: 15px;
+}
+
+    .course-page .dropdown-menu:before {
+        position: absolute;
+        top: -20px;
+        left: auto;
+        right: -1px;
+        display: inline-block;
+        border-right: 1px solid transparent;
+        border-bottom: 20px solid #ccc;
+        border-left: 20px solid transparent;
+        border-bottom-color: rgba(0, 0, 0, 0.2);
+        border-bottom-color: #ddd;
+        content: '';
     }
 
-    #topbar .navbar-top-links li > a {
-        padding: 12px 20px;
+.course-page .dropdown-setting {
+    z-index: 100;
+    position: absolute;
+    right: 0;
+    cursor: pointer;
+    padding-left: 5px;
+    padding-right: 5px;
+    top: auto;
+    bottom: 0;
+}
+
+.course-page .dropdown-menu:after {
+    position: absolute;
+    top: -18px;
+    left: auto;
+    right: 0;
+    display: inline-block;
+    border-right: 0px solid transparent;
+    border-bottom: 19px solid #ffffff;
+    border-left: 19px solid transparent;
+    content: '';
+}
+
+
+.serach-container {
+    border-bottom: 1px solid #ddd;
+    padding: 15px 30px;
+    background: #fff;
+}
+
+.navbar-static-side .menu-section {
+    border-right: 1px solid #ddd;
+    height: 100vh;
+}
+
+.input-box-search {
+    padding-left: 15px;
+    line-height: 17px;
+    font-size: 14px;
+    width: 250px;
+    color: #3C4B53;
+    height: 35px;
+    border-radius: 100px;
+    border: solid 1px #9e9e9e;
+    background: url('../assets/images/serachicon.png') no-repeat 93% 50%;
+    font-family: 'Roboto-Light';
+}
+
+.navbar-static-side ul li.active a {
+    background: #d4f0ed !important;
+    color: #003261 !important;
+    padding: 18px 30px !important;
+    border-radius: 0;
+}
+
+.navbar-static-side ul li {
+    background: #F4F8F9;
+    border: none;
+}
+
+.overview-container {
+    background: #4a49fb;
+    padding: 13px 25px;
+    color: #fff;
+    font-family: 'Roboto-Medium';
+    font-size: 14px;
+}
+
+.owner-section {
+    border: 1px solid #004274;
+    border-radius: 5px;
+    padding: 1px 5px;
+    font-size: 12px;
+    height: 20px;
+    margin-bottom: 10px;
+}
+
+.enrolled-section {
+    border: 1px solid #4a90e2;
+    border-radius: 5px;
+    padding: 1px 5px;
+    color: #4a90e2;
+    font-size: 12px;
+    height: 20px;
+    margin-bottom: 10px;
+}
+
+.fa.fa-ellipsis-v {
+    color: #dadfeb !important;
+}
+
+.navbar-static-side ul li a:hover, .navbar-static-side ul li a:focus {
+    background: #F4F8F9;
+}
+
+.navbar-static-side ul li a {
+    color: #003261 !important;
+    padding: 18px 30px !important;
+    font-size: 12px;
+    font-family: 'Roboto-Medium';
+    background-color: #faf9f9 !important;
+}
+
+.nav-pills > li + li {
+    margin-left: 0px;
+}
+
+.padding-right-0 {
+    padding-right: 0;
+}
+
+.Created-day {
+    color: #9e9e9e;
+    margin-top: 5px;
+    font-family: 'Roboto-Light';
+    font-size: 12px;
+}
+
+.margin-top-20 {
+    margin-top: 20px !important;
+}
+
+.course-container {
+    cursor: pointer;
+    border: 1px solid #dadfeb;
+    border-radius: 3px;
+    color: #003261;
+    padding: 12px 15px;
+    font-size: 18px;
+    min-height: 230px;
+    background: #fff;
+}
+
+.course-hover {
+    cursor: pointer;
+    position: absolute;
+    z-index: 33;
+    top: 0px;
+    left: 0px;
+    width: 100%;
+    height: 100%;
+    display: none;
+    border: 1px solid #4a49fb;
+    border-radius: 3px;
+    padding: 8px 15px;
+    -webkit-box-shadow: 1px 1px 10px 1px rgba(0,0,0,0.25);
+    -o-box-shadow: 1px 1px 10px 1px rgba(0,0,0,0.25);
+    -ms-box-shadow: 1px 1px 10px 1px rgba(0,0,0,0.25);
+    -moz-box-shadow: 1px 1px 10px 1px rgba(0,0,0,0.25);
+    box-shadow: 1px 1px 10px 1px rgba(0,0,0,0.25);
+}
+
+.course-container:hover .course-hover {
+    display: block;
+}
+
+.add-course-container {
+    border: 1px dashed #dadfeb;
+    border-radius: 3px;
+    color: #F29D00;
+    padding: 15px 15px;
+    font-size: 18px;
+    min-height: 230px;
+    text-align: center;
+    background: #fff;
+}
+
+    .add-course-container:hover {
+        border: 1px solid #4a49fb;
+        -webkit-box-shadow: 1px 1px 10px 1px rgba(0,0,0,0.25);
+        -o-box-shadow: 1px 1px 10px 1px rgba(0,0,0,0.25);
+        -ms-box-shadow: 1px 1px 10px 1px rgba(0,0,0,0.25);
+        -moz-box-shadow: 1px 1px 10px 1px rgba(0,0,0,0.25);
+        box-shadow: 1px 1px 10px 1px rgba(0,0,0,0.25);
     }
+
+        .add-course-container:hover .add-course-hover {
+            display: block;
+        }
+
+.enrolled-container {
+    cursor: pointer;
+    border: 1px solid #dadfeb;
+    border-radius: 3px;
+    color: #00a9e3;
+    padding: 12px 15px;
+    font-size: 18px;
+    min-height: 230px;
+    background: #fff;
+}
+
+.enrolled-hover {
+    cursor: pointer;
+    position: absolute;
+    z-index: 33;
+    top: 0px;
+    left: 0px;
+    width: 100%;
+    height: 100%;
+    display: none;
+    border: 1px solid #4a49fb;
+    border-radius: 3px;
+    padding: 8px 15px;
+    -webkit-box-shadow: 1px 1px 10px 1px rgba(0,0,0,0.25);
+    -o-box-shadow: 1px 1px 10px 1px rgba(0,0,0,0.25);
+    -ms-box-shadow: 1px 1px 10px 1px rgba(0,0,0,0.25);
+    -moz-box-shadow: 1px 1px 10px 1px rgba(0,0,0,0.25);
+    box-shadow: 1px 1px 10px 1px rgba(0,0,0,0.25);
+}
+
+.enrolled-container:hover .enrolled-hover {
+    display: block;
+}
+
+.hover-content {
+    position: absolute;
+    bottom: 15px;
+    top: auto;
+    padding-top: 220px !important;
+}
+
+.nocourse-section {
+    color: #a3a5a6;
+    margin: 0;
+    font-size: 16px;
+    font-family: 'Roboto-Medium';
+}
+
+.padding-top-25 {
+    padding-top: 25px;
+}
+
+.padding-top-75 {
+    padding-top: 75px;
+}
+
+button.close {
+    color: #757575 !important;
+    border-radius: 100px;
+    letter-spacing: 0px;
+    font-size: 10px;
+    opacity: inherit !important;
+    outline: none;
+    font-weight: normal;
+    font-family: 'roboto.regular';
+    font-size: 13px;
+    line-height: 1.42857143;
+}
+
+.padding-15-30 {
+    padding: 15px 30px !important;
+}
+
+.padding-15 {
+    padding: 15px !important;
+}
+
+.modal-footer {
+    border-top: none;
+    text-align: left;
+    background: #faf9f9;
+    border-radius: 0 0 4px 4px;
+}
+
+.modal-header {
+    border-radius: 4px 4px 0 0;
+    padding: 23px 15px;
+}
+
+.modal-title {
+    color: #212121;
+    font-family: 'Roboto-Medium';
+    font-size: 15px;
+}
+
+.modal-body {
+    padding: 0;
+}
+
+.saveandsetup {
+    padding: 6px 12px;
+    margin-left: 0;
+    margin-top: 40px;
+}
+
+.btn-leave {
+    padding: 8px 38px;
+}
+
+.course-div {
+    font-family: 'Roboto-Bold';
+    white-space: nowrap;
+    overflow: hidden !important;
+    text-overflow: ellipsis;
+}
+
+.course-img {
+    position: absolute;
+    top: 78%;
+    left: 20%;
+}
+
+.p-l-r-15 {
+    padding-left: 15px;
+    padding-right: 15px;
+}
+
+.margin-top-25 {
+    margin-top: 25px;
+}
+
+.plussetting {
+    padding: 20px;
+    border-radius: 100px;
+    border: 1px solid #4a49fb;
+    color: #4a49fb;
+}
+
+.addcourse-img {
+    height: 100px;
+}
+
+#topbar .topbar-main {
+    background: #fff;
+}
+
+#page-wrapper {
+    background-color: #fff;
+}
+
+#sidebar {
+    background-color: #faf9f9;
+    border-right: 1px solid #ddd;
+    min-height: 100%;
 }

@@ -5,7 +5,7 @@ import { Router } from '@angular/router';
 @Component({
     selector: 'app-course-dashboard-route',
     templateUrl: './course-dashboard.component.html',
-    styleUrls: ['./course-dashboard.component.css']
+    styleUrls: ['./course-dashboard.component.css','../app.component.css']
 
 })
 

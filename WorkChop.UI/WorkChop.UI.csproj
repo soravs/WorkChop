@@ -112,6 +112,7 @@
     <Content Include="src\account\login\login.component.html" />
     <Content Include="src\app\course-dashboard\course-dashboard.component.css" />
     <Content Include="src\app\course-dashboard\course-dashboard.component.html" />
+    <Content Include="src\assets\images\Asset 4.png" />
     <Content Include="src\assets\images\bar-graph-active.svg" />
     <Content Include="src\assets\images\bar-graph.png" />
     <Content Include="src\assets\images\bar-graph.svg" />
@@ -119,6 +120,7 @@
     <Content Include="src\assets\images\black.png" />
     <Content Include="src\assets\images\calendar.svg" />
     <Content Include="src\assets\images\circles.png" />
+    <Content Include="src\assets\images\CloseButton.svg" />
     <Content Include="src\assets\images\edit-icon.PNG" />
     <Content Include="src\assets\images\folder.svg" />
     <Content Include="src\assets\images\Group 2.png" />
@@ -134,6 +136,7 @@
     <Content Include="src\assets\images\megaphone.svg" />
     <Content Include="src\assets\images\megaphoneA.png" />
     <Content Include="src\assets\images\megaphoneactive.svg" />
+    <Content Include="src\assets\images\plusicon.svg" />
     <Content Include="src\assets\images\raise-your-hand-to-ask-active.svg" />
     <Content Include="src\assets\images\raise-your-hand-to-ask.png" />
     <Content Include="src\assets\images\raise-your-hand-to-ask.svg" />
