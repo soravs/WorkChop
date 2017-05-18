@@ -28,10 +28,8 @@ export class LoginComponent implements OnInit {
     }
 
     login() {
-        debugger;
         this._authenticationService.login(this.loginVM)
             .subscribe(result => {
-                debugger;
                 if (result) {
                      this._router.navigate(['/app/course']);
 
@@ -39,7 +37,6 @@ export class LoginComponent implements OnInit {
                     this.errorMessage = 'Username or password is incorrect';
                 }
             }, error => {
-                debugger;
                 this.errorMessage = error.json().Message;
             });
     }

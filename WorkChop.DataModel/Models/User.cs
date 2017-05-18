@@ -5,7 +5,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace WorkChop.DataModel.Models
 {
-    public class Users
+    public class User
     {
         [BsonId]
         [BsonElement("_id")]
@@ -21,5 +21,7 @@ namespace WorkChop.DataModel.Models
         public Nullable<Guid> CreatedBy { get; set; }
         public DateTime UpdatedOn { get; set; }
         public Nullable<DateTime> DeletedOn { get; set; }
+
+        public UserRoleMapping UserRoleMapping { get; set; }
     }
 }

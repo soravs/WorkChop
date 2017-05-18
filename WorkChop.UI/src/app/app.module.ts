@@ -5,6 +5,7 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { CourseDashboardComponent } from './course-dashboard/course-dashboard.component';
 import { AppRouteGuard } from '../shared/auth/auth-route-guard';
+import { ModalModule } from 'ngx-bootstrap';
 
 @NgModule({
     declarations: [
@@ -14,7 +15,8 @@ import { AppRouteGuard } from '../shared/auth/auth-route-guard';
     imports: [
         FormsModule,
         HttpModule,
-        AppRoutingModule
+        AppRoutingModule,
+        ModalModule.forRoot()
     ],
     providers: [
         AppRouteGuard

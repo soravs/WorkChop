@@ -3,61 +3,76 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
-using System.Web.Http.Cors;
 using WorkChop.App_Helper;
 using WorkChop.BusinessService.IBusinessService;
 using WorkChop.Common.ViewModel;
+using WorkChop.DataModel.Models;
 using WorkChop.Filters;
 
 namespace WorkChop.Controllers
 {
     [HandleApiException]
     [ValidateModel]
-    [RoutePrefix("api/User")]
+    [RoutePrefix("api/user")]
     public class UserController : ApiController
     {
         private readonly IUserService _userService;
+
         public UserController(IUserService userService)
         {
             _userService = userService;
         }
+
+        /// <summary>
+        /// Method to get all users
+        /// </summary>
+        /// <returns></returns>
         [Authorize]
         [HttpGet]
-        [Route("GetAllUsers")]
+        [Route("getallusers")]
         public HttpResponseMessage GetAllUsers()
         {
             var users = _userService.GetAll();
             if (users.Any()) return Request.CreateResponse(HttpStatusCode.OK, users);
             return Request.CreateErrorResponse(HttpStatusCode.NotFound, "No users found.");
         }
-        //[Authorize]
+
+        /// <summary>
+        /// Method to get user by user id
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <returns></returns>
         [HttpGet]
-        [Route("GetParticularUser")]
+        [Route("getparticularuser")]
         public HttpResponseMessage GetParticularUser(Guid userId)
         {
             var users = _userService.Get(userId);
             if (users != null) return Request.CreateResponse(HttpStatusCode.OK, users);
             return Request.CreateErrorResponse(HttpStatusCode.NotFound, "No users found.");
         }
-        [HttpPost]
-        [Route("SignUp")]
-        public HttpResponseMessage SignUp(UserViewModel user)
-        {
-            _userService.Insert(user);
 
-            // Send Email
-
-            return Request.CreateResponse(HttpStatusCode.Created, user);
-        }
         /// <summary>
-        /// Sign In user
+        /// Method to register user detail by user viewmodel
+        /// </summary>
+        /// <param name="user"></param>
+        /// <returns></returns>
+        [HttpPost]
+        [Route("signup")]
+        public HttpResponseMessage SignUp(User userVM)
+        {
+            _userService.Insert(userVM);
+            return Request.CreateResponse(HttpStatusCode.Created, userVM);
+        }
+
+        /// <summary>
+        /// Method to Sign In user
         /// </summary>
         /// <param name="userName"></param>
         /// <param name="password"></param>
         /// <param name="roleId"></param>
         /// <returns></returns>
         [HttpPost]
-        [Route("SignIn")]
+        [Route("signin")]
         public HttpResponseMessage SignIn(LoginViewModel objLoginViewModel)
         {
             var user = _userService.GetUserByRole(objLoginViewModel);
@@ -73,7 +88,7 @@ namespace WorkChop.Controllers
 
             if (token == null)
             {
-                user.ErrorMessage = "Token Unavialable";
+                user.ErrorMessage = "Token Unavailable";
                 return Request.CreateErrorResponse(HttpStatusCode.NotModified, user.ErrorMessage);
             }
 
@@ -81,7 +96,5 @@ namespace WorkChop.Controllers
 
             return Request.CreateResponse(HttpStatusCode.OK, user);
         }
-
-
     }
 }

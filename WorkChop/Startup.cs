@@ -5,6 +5,7 @@ using Microsoft.Owin;
 using Owin;
 using Microsoft.Owin.Security.OAuth;
 using WorkChop.Providers;
+using WorkChop.BusinessService.IBusinessService;
 
 [assembly: OwinStartup(typeof(WorkChop.Startup))]
 

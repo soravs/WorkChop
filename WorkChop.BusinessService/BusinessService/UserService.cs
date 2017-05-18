@@ -7,6 +7,7 @@ using WorkChop.Common.ResponseViewModel;
 using WorkChop.Common.ViewModel;
 using WorkChop.DataModel.Models;
 using WorkChop.DataModel.Repository;
+using static WorkChop.Common.EnumUtil;
 
 namespace WorkChop.BusinessService.BusinessService
 {
@@ -24,9 +25,9 @@ namespace WorkChop.BusinessService.BusinessService
         /// </summary>
         /// <param name="i"></param>
         /// <returns></returns>
-        public Users Get(int i)
+        public User Get(int userId)
         {
-            return _unitOfwork.UserRepository.Get(i);
+            return _unitOfwork.UserRepository.Get(userId);
         }
 
         /// <summary>
@@ -34,49 +35,47 @@ namespace WorkChop.BusinessService.BusinessService
         /// </summary>
         /// <param name="i"></param>
         /// <returns></returns>
-        public Users Get(Guid i)
+        public User Get(Guid userId)
         {
-            return _unitOfwork.UserRepository.Get(i);
+            return _unitOfwork.UserRepository.Get(userId);
         }
 
         /// <summary>
         /// 
         /// </summary>
         /// <returns></returns>
-        public IQueryable<Users> GetAll()
+        public IQueryable<User> GetAll()
         {
             return _unitOfwork.UserRepository.GetAll();
         }
 
         /// <summary>
-        /// 
+        /// Method to save user with role
         /// </summary>
-        /// <param name="student"></param>
-        public void Insert(UserViewModel user)
+        /// <param name="userVM"></param>
+        /// <returns></returns>
+        public User Insert(User userVM)
         {
-            AutoMapper.Mapper.CreateMap<UserViewModel, Users>();
-            var userData = AutoMapper.Mapper.Map<UserViewModel, Users>(user);
-            userData.UserID = new Guid();
-            userData.CreatedOn = DateTime.UtcNow;
-            userData.UpdatedOn = DateTime.UtcNow;
-            _unitOfwork.UserRepository.Add(userData);
-            if (user.RoleId != 0)
+            userVM.UserID = new Guid();
+            userVM.CreatedOn = DateTime.UtcNow;
+            userVM.UpdatedOn = DateTime.UtcNow;
+
+            userVM.UserRoleMapping = new UserRoleMapping()
             {
-                UserRoleRelation userRelation = new UserRoleRelation
-                {
-                    Fk_UserId = userData.UserID,
-                    Fk_RoleId = user.RoleId,
-                    CreatedOn = DateTime.UtcNow
-                };
-                _unitOfwork.UserRoleRelationRepository.Add(userRelation);
-            }
+                CreatedOn=DateTime.UtcNow,
+                Fk_RoleId=(int)UserRoleEnum.Teacher
+            };
+
+            _unitOfwork.UserRepository.Add(userVM);
+            return userVM;
         }
+
         /// <summary>
         /// 
         /// </summary>
         /// <param name="email"></param>
         /// <returns></returns>
-        public Users GetByQuery(string email)
+        public User GetByQuery(string email)
         {
             return _unitOfwork.UserRepository.GetByQuery(x => x.Email, email);
         }
@@ -87,30 +86,29 @@ namespace WorkChop.BusinessService.BusinessService
         /// <param name="email"></param>
         /// <param name="roleId"></param>
         /// <returns></returns>
-        public UserResponseModel GetUserByRole(LoginViewModel objLoginViewModel)
+        public UserResponseModel GetUserByRole(LoginViewModel loginVM)
         {
             var userData = new UserResponseModel();
-            var getUserData = (from user in _unitOfwork.UserRepository.GetAll()
-                               join roleRelation in _unitOfwork.UserRoleRelationRepository.GetAll() on user.UserID equals roleRelation.Fk_UserId
-                               join role in _unitOfwork.UserRoleRepository.GetAll() on roleRelation.Fk_RoleId equals role.RoleId
-                               where user.Email == objLoginViewModel.UserName
-                               select new { UserResponseModel = user, RoleResponseModel = role }).ToList();
+            var userList = _unitOfwork.UserRepository.GetDbSet(x => x.Email == loginVM.UserName).ToList();
 
-
-            if (getUserData.Count == 0)
+            if (userList.Count == 0)
             {
                 userData.HasError = true;
                 userData.ErrorMessage = "User not found";
                 return userData;
             }
-            AutoMapper.Mapper.CreateMap<Users, UserResponseModel>();
-            userData = AutoMapper.Mapper.Map<Users, UserResponseModel>(getUserData.FirstOrDefault().UserResponseModel);
+            AutoMapper.Mapper.CreateMap<User, UserResponseModel>();
+            userData = AutoMapper.Mapper.Map<User, UserResponseModel>(userList.FirstOrDefault());
             userData.RoleResponseModel = new List<RoleResponseModel>();
-            foreach (var itemData in getUserData)
+            foreach (var itemData in userList)
             {
-                AutoMapper.Mapper.CreateMap<UserRole, RoleResponseModel>();
-                var roleData = AutoMapper.Mapper.Map<UserRole, RoleResponseModel>(itemData.RoleResponseModel);
-                userData.RoleResponseModel.Add(roleData);
+                if (itemData.UserRoleMapping != null)
+                {
+                    var userRoleVM = new RoleResponseModel();
+                    userRoleVM.RoleId = itemData.UserRoleMapping.Fk_RoleId;
+                    userRoleVM.RoleName = ((UserRoleEnum)itemData.UserRoleMapping.Fk_RoleId).ToString();
+                    userData.RoleResponseModel.Add(userRoleVM);
+                }
             }
             userData.HasError = false;
             userData.ErrorMessage = string.Empty;

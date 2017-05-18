@@ -8,15 +8,17 @@ namespace WorkChop.DataModel.Repository
         /// <summary>
         /// UserRepository
         /// </summary>
-        IRepository<Users> UserRepository { get; }
-        /// <summary>
-        /// User Role Relation Repository
-        /// </summary>
-        IRepository<UserRoleRelation> UserRoleRelationRepository { get; }
+        IRepository<User> UserRepository { get; }
+
         /// <summary>
         /// User Role Repository
         /// </summary>
         IRepository<UserRole> UserRoleRepository { get; }
+
+        /// <summary>
+        /// Course Repository
+        /// </summary>
+        IRepository<Course> CourseRepository { get; }
         #endregion
     }
 }

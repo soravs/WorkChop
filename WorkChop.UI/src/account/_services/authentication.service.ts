@@ -1,7 +1,8 @@
 ﻿import { Injectable } from '@angular/core';
 import { Http, Headers, Response, RequestOptions, RequestMethod } from '@angular/http';
 import { Observable } from 'rxjs';
-import 'rxjs/add/operator/map'
+import { Config } from '../../shared/AppConst';
+import 'rxjs/add/operator/map';
 
 @Injectable()
 export class AuthenticationService {
@@ -12,11 +13,11 @@ export class AuthenticationService {
         // set token if saved in local storage
         var currentUser = JSON.parse(localStorage.getItem('currentUser'));
         this.token = currentUser && currentUser.token;
-        this.url = "http://localhost:53027";
+        this.url = Config.getEnvironmentVariable('endPoint');
     }
 
     login(loginVM: any): Observable<boolean> {
-        return this.http.request(this.url + "/api/user/SignIn", {
+        return this.http.request(this.url + "api/user/signin", {
             method: 'post',
             body: JSON.stringify(loginVM),
             headers: new Headers({ 'Content-Type': 'application/json' })
@@ -36,7 +37,6 @@ export class AuthenticationService {
                 return false;
             }
         }, error => {
-            debugger;
         });
     }
 

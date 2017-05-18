@@ -202,6 +202,7 @@
     <TypeScriptCompile Include="src\root-routing.module.ts" />
     <TypeScriptCompile Include="src\root.component.ts" />
     <TypeScriptCompile Include="src\root.module.ts" />
+    <TypeScriptCompile Include="src\shared\AppConst.ts" />
     <TypeScriptCompile Include="src\shared\auth\auth-route-guard.ts" />
     <TypeScriptCompile Include="src\test.ts" />
     <TypeScriptCompile Include="src\typings.d.ts" />

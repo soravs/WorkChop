@@ -15,14 +15,14 @@ namespace WorkChop.DataModel.Repository
         /// </summary>
         /// <param name="i"></param>
         /// <returns></returns>
-        TEntity Get(int i);
+        TEntity Get(int id);
 
         /// <summary>
         ///  Generic Get method to get record on the basis of object id  
         /// </summary>
         /// <param name="i"></param>
         /// <returns></returns>
-        TEntity Get(Guid i);
+        TEntity Get(Guid id);
 
         /// <summary>
         ///  Get all records   
@@ -58,5 +58,7 @@ namespace WorkChop.DataModel.Repository
         /// <param name="name"></param>
         /// <returns></returns>
         TEntity GetByQuery(Expression<Func<TEntity, string>> queryExpression, string name);
+
+       IQueryable<TEntity> GetDbSet(Expression<Func<TEntity, bool>> queryExpression);
     }
 }

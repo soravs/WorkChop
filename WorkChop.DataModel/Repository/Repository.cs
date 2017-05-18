@@ -1,5 +1,4 @@
-﻿using MongoDB.Bson;
-using MongoDB.Driver;
+﻿using MongoDB.Driver;
 using MongoDB.Driver.Builders;
 using System;
 using System.Linq;
@@ -37,9 +36,9 @@ namespace WorkChop.DataModel.Repository
         /// </summary>
         /// <param name="i"></param>
         /// <returns></returns>
-        public TEntity Get(int i)
+        public TEntity Get(int id)
         {
-            return _collection.FindOneById(i);
+            return _collection.FindOneById(id);
         }
      
         /// <summary>
@@ -47,10 +46,11 @@ namespace WorkChop.DataModel.Repository
         /// </summary>
         /// <param name="i"></param>
         /// <returns></returns>
-        public TEntity Get(Guid i)
+        public TEntity Get(Guid id)
         {
-            return _collection.FindOneById(i);
+            return _collection.FindOneById(id);
         }
+
         ///<summary>  
         /// Get all records   
         ///</summary>  
@@ -100,6 +100,13 @@ namespace WorkChop.DataModel.Repository
         {
             var query = Query<TEntity>.EQ(queryExpression, name);
             return _collection.FindOne(query);
+        }
+
+        public IQueryable<TEntity> GetDbSet(Expression<Func<TEntity, bool>> queryExpression)
+        {
+            var query = Query<TEntity>.Where(queryExpression);
+            MongoCursor<TEntity> cursor = _collection.Find(query);
+            return cursor.AsQueryable<TEntity>();
         }
     }
 }

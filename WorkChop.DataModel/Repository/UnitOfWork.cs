@@ -14,11 +14,15 @@ namespace WorkChop.DataModel.Repository
 
         #region Property
 
-        protected IRepository<Users> _users;
+        protected IRepository<User> _users;
 
-        protected IRepository<UserRoleRelation> _userRoleRelation;
+        protected IRepository<UserRoleMapping> _userRoleRelation;
 
         protected IRepository<UserRole> _userRole;
+
+        protected IRepository<Course> _course;
+
+        protected IRepository<UserCourseMapping> _userCourseMapping;
 
         #endregion
 
@@ -36,9 +40,9 @@ namespace WorkChop.DataModel.Repository
         /// <summary>
         /// User Repository
         /// </summary>
-        public IRepository<Users> UserRepository
+        public IRepository<User> UserRepository
         {
-            get { return _users ?? (_users = new Repository<Users>(_database,"Users")); }
+            get { return _users ?? (_users = new Repository<User>(_database,"User")); }
         }
 
         /// <summary>
@@ -50,12 +54,13 @@ namespace WorkChop.DataModel.Repository
         }
 
         /// <summary>
-        /// UserRole Repository
+        /// Course Repository
         /// </summary>
-        public IRepository<UserRoleRelation> UserRoleRelationRepository
+        public IRepository<Course> CourseRepository
         {
-            get { return _userRoleRelation ?? (_userRoleRelation = new Repository<UserRoleRelation>(_database, "UserRoleRelation")); }
+            get { return _course ?? (_course = new Repository<Course>(_database, "Course")); }
         }
+       
         #endregion
     }
 }
