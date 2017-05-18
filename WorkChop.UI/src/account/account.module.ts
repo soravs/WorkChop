@@ -4,11 +4,12 @@ import { HttpModule} from '@angular/http';
 import { AccountRoutingModule } from './account-routing.module';
 import { AccountComponent } from './account.component';
 import { LoginComponent } from './login/login.component';
-import { AuthGuard } from './_guards/auth.guard';
 import { AuthenticationService } from './_services/authentication.service';
+import { CommonModule } from '@angular/common';
 
 @NgModule({
     imports: [
+        CommonModule,
         FormsModule,
         HttpModule,
         AccountRoutingModule,
@@ -18,8 +19,7 @@ import { AuthenticationService } from './_services/authentication.service';
         LoginComponent,
     ],
     providers: [
-        AuthGuard,
-        AuthenticationService,
+        AuthenticationService
     ]
 })
 export class AccountModule {

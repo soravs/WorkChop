@@ -20,17 +20,18 @@
             <div class="col-sm-12">
                 <form #loginForm="ngForm" id="LoginForm" method="post" novalidate (ngSubmit)="login()">
                     <div class="form-group">
-                        <input [(ngModel)]="loginVM.userName" autoFocus class="form-control" type="text" autocomplete="off" placeholder="Enter your email address" name="userName" required/>
+                        <input [(ngModel)]="loginVM.userName" autoFocus class="form-control" type="text"  placeholder="Enter your email address" name="userName" required/>
                     </div>
                     <div class="form-group">
-                        <input [(ngModel)]="loginVM.password" class="form-control" type="password" autocomplete="off" placeholder="Enter your password" name="password" required/>
+                        <input [(ngModel)]="loginVM.password" class="form-control" type="password" placeholder="Enter your password" name="password" required/>
                     </div>
                     <button id="LoginButton" type="submit" class="btn btn-default btn-blue margin-bottom-15" [disabled]="!loginForm.form.valid">SIGN IN</button>
                     <div class="form-group">
                         <a class="forgot-password">Forgot your password?</a>
                     </div>
-
+                    <div *ngIf="errorMessage"  class="alert alert-danger">{{errorMessage}}</div>
                 </form>
+                
             </div>
         </div>
         <div class="footer-login">Visit <span class="font-bold">workchop.Be</span> for more information</div>

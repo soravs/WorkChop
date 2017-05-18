@@ -3,6 +3,7 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
+using System.Web.Http.Cors;
 using WorkChop.App_Helper;
 using WorkChop.BusinessService.IBusinessService;
 using WorkChop.Common.ViewModel;
@@ -24,7 +25,7 @@ namespace WorkChop.Controllers
         [HttpGet]
         [Route("GetAllUsers")]
         public HttpResponseMessage GetAllUsers()
-        { 
+        {
             var users = _userService.GetAll();
             if (users.Any()) return Request.CreateResponse(HttpStatusCode.OK, users);
             return Request.CreateErrorResponse(HttpStatusCode.NotFound, "No users found.");
@@ -35,14 +36,14 @@ namespace WorkChop.Controllers
         public HttpResponseMessage GetParticularUser(Guid userId)
         {
             var users = _userService.Get(userId);
-            if (users!=null) return Request.CreateResponse(HttpStatusCode.OK, users);
+            if (users != null) return Request.CreateResponse(HttpStatusCode.OK, users);
             return Request.CreateErrorResponse(HttpStatusCode.NotFound, "No users found.");
         }
         [HttpPost]
         [Route("SignUp")]
         public HttpResponseMessage SignUp(UserViewModel user)
         {
-            _userService.Insert(user); 
+            _userService.Insert(user);
 
             // Send Email
 
@@ -59,20 +60,28 @@ namespace WorkChop.Controllers
         [Route("SignIn")]
         public HttpResponseMessage SignIn(LoginViewModel objLoginViewModel)
         {
-            var user =  _userService.GetUserByRole(objLoginViewModel);
-            if (user == null) return Request.CreateErrorResponse(HttpStatusCode.NotFound, "User Not Found");
+            var user = _userService.GetUserByRole(objLoginViewModel);
+            if (user.HasError) return Request.CreateErrorResponse(HttpStatusCode.NotFound, user.ErrorMessage);
 
-            if(user.Password != objLoginViewModel.Password) return Request.CreateErrorResponse(HttpStatusCode.NotAcceptable, "Password didn't match");
+            if (user.Password != objLoginViewModel.Password)
+            {
+                user.ErrorMessage = "Password didn't match";
+                return Request.CreateErrorResponse(HttpStatusCode.NotAcceptable, user.ErrorMessage);
+            }
 
-            var tkn = AuthToken.GetLoingInfo(objLoginViewModel);
+            var token = AuthToken.GetLoingInfo(objLoginViewModel);
 
-            if(tkn==null) return Request.CreateErrorResponse(HttpStatusCode.NotModified, "Token Unavialable");
+            if (token == null)
+            {
+                user.ErrorMessage = "Token Unavialable";
+                return Request.CreateErrorResponse(HttpStatusCode.NotModified, user.ErrorMessage);
+            }
 
-            user.TokenModel = tkn;
+            user.TokenModel = token;
 
-            return Request.CreateResponse(HttpStatusCode.OK,user);
+            return Request.CreateResponse(HttpStatusCode.OK, user);
         }
 
-       
+
     }
 }

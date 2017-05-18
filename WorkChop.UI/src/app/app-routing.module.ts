@@ -1,22 +1,9 @@
 ﻿import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
-//import { LoginComponent } from './login/Component/login.component';
-//import { HomeComponent } from './Home/Component/home.component';
-import { AuthGuard } from '../account/_guards/auth.guard';
-import { AppComponent } from './app.component'
-import {CourseDashboardComponent } from './course-dashboard/course-dashboard.component'
-
-//export const routes: Routes = [
-//    {
-//        path: '',
-//        pathMatch: 'full',
-//        component: LoginComponent
-//    },
-//    {
-//        path: 'home',
-//        component:HomeComponent
-//    }
-//];
+//import { AuthGuard } from '../account/_guards/auth.guard';
+import { AppComponent } from './app.component';
+import { CourseDashboardComponent } from './course-dashboard/course-dashboard.component';
+import { AppRouteGuard } from '../shared/auth/auth-route-guard';
 
 @NgModule({
     imports: [
@@ -25,7 +12,7 @@ import {CourseDashboardComponent } from './course-dashboard/course-dashboard.com
                 path: '',
                 component: AppComponent,
                 children: [
-                    { path: 'course', component: CourseDashboardComponent, canActivate: [AuthGuard] }
+                    { path: 'course', component: CourseDashboardComponent, canActivate: [AppRouteGuard] }
                 ]
             }
         ])

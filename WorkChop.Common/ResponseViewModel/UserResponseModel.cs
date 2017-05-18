@@ -3,10 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using WorkChop.DataModel.Models;
 
 namespace WorkChop.Common.ResponseViewModel
 {
-    public class UserResponseModel
+    public class UserResponseModel: BaseViewModel
     {
         public Guid UserID { get; set; }
         public string Email { get; set; }

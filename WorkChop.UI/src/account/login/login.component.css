@@ -19,13 +19,8 @@
 }
 
 
-.no-margin {
-    margin: 0px !important;
-}
 
-.padding-0 {
-    padding: 0 !important;
-}
+
 
 .login-pic {
     width: 100%;
@@ -108,4 +103,7 @@ a.forgot-password {
 
 .margin-bottom-15 {
     margin-bottom: 15px !important;
+}
+.errorMessageColor{
+    background-color:lightcoral;
 }

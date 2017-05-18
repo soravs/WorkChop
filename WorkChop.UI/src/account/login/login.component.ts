@@ -13,13 +13,13 @@ import { AuthenticationService } from '../_services/authentication.service';
 export class LoginComponent implements OnInit {
 
     private loginVM: LoginViewModel;
-    error = '';
+    errorMessage = '';
 
     constructor(
         private _http: Http,
         private _router: Router,
         private _authenticationService: AuthenticationService) {
-        this.loginVM = new LoginViewModel('','' );
+        this.loginVM = new LoginViewModel('','');
     }
 
     ngOnInit() {
@@ -29,17 +29,18 @@ export class LoginComponent implements OnInit {
 
     login() {
         debugger;
-        this._authenticationService.login(this.loginVM.userName, this.loginVM.password)
+        this._authenticationService.login(this.loginVM)
             .subscribe(result => {
                 debugger;
-                if (result === true) {
+                if (result) {
                      this._router.navigate(['/app/course']);
 
                 } else {
-                    this.error = 'Username or password is incorrect';
+                    this.errorMessage = 'Username or password is incorrect';
                 }
             }, error => {
-                this.error = error.json().Message;
+                debugger;
+                this.errorMessage = error.json().Message;
             });
     }
 }

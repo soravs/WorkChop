@@ -89,28 +89,32 @@ namespace WorkChop.BusinessService.BusinessService
         /// <returns></returns>
         public UserResponseModel GetUserByRole(LoginViewModel objLoginViewModel)
         {
+            var userData = new UserResponseModel();
             var getUserData = (from user in _unitOfwork.UserRepository.GetAll()
                                join roleRelation in _unitOfwork.UserRoleRelationRepository.GetAll() on user.UserID equals roleRelation.Fk_UserId
                                join role in _unitOfwork.UserRoleRepository.GetAll() on roleRelation.Fk_RoleId equals role.RoleId
                                where user.Email == objLoginViewModel.UserName
                                select new { UserResponseModel = user, RoleResponseModel = role }).ToList();
 
-            if (getUserData.Count > 0)
+
+            if (getUserData.Count == 0)
             {
-                AutoMapper.Mapper.CreateMap<Users, UserResponseModel>();
-                var userData = AutoMapper.Mapper.Map<Users, UserResponseModel>(getUserData.FirstOrDefault().UserResponseModel);
-                userData.RoleResponseModel = new List<RoleResponseModel>();
-                foreach (var itemData in getUserData)
-                {
-                    AutoMapper.Mapper.CreateMap<UserRole, RoleResponseModel>();
-                    var roleData = AutoMapper.Mapper.Map<UserRole, RoleResponseModel>(itemData.RoleResponseModel);
-                    userData.RoleResponseModel.Add(roleData);
-                }
+                userData.HasError = true;
+                userData.ErrorMessage = "User not found";
                 return userData;
             }
-            return null;
+            AutoMapper.Mapper.CreateMap<Users, UserResponseModel>();
+            userData = AutoMapper.Mapper.Map<Users, UserResponseModel>(getUserData.FirstOrDefault().UserResponseModel);
+            userData.RoleResponseModel = new List<RoleResponseModel>();
+            foreach (var itemData in getUserData)
+            {
+                AutoMapper.Mapper.CreateMap<UserRole, RoleResponseModel>();
+                var roleData = AutoMapper.Mapper.Map<UserRole, RoleResponseModel>(itemData.RoleResponseModel);
+                userData.RoleResponseModel.Add(roleData);
+            }
+            userData.HasError = false;
+            userData.ErrorMessage = string.Empty;
+            return userData;
         }
-
-
     }
 }
