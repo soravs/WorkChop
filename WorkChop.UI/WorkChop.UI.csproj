@@ -204,6 +204,8 @@
     <TypeScriptCompile Include="src\root.module.ts" />
     <TypeScriptCompile Include="src\shared\AppConst.ts" />
     <TypeScriptCompile Include="src\shared\auth\auth-route-guard.ts" />
+    <TypeScriptCompile Include="src\shared\service-proxies\service-proxies.ts" />
+    <TypeScriptCompile Include="src\shared\service-proxies\service-proxy.module.ts" />
     <TypeScriptCompile Include="src\test.ts" />
     <TypeScriptCompile Include="src\typings.d.ts" />
   </ItemGroup>

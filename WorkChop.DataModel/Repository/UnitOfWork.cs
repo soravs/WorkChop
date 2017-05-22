@@ -61,6 +61,13 @@ namespace WorkChop.DataModel.Repository
             get { return _course ?? (_course = new Repository<Course>(_database, "Course")); }
         }
        
+        /// <summary>
+        /// User Course Repository
+        /// </summary>
+        public IRepository<UserCourseMapping> UserCourseMappingRepository
+        {
+            get { return _userCourseMapping ?? (_userCourseMapping = new Repository<UserCourseMapping>(_database, "UserCourseMapping")); }
+        }
         #endregion
     }
 }

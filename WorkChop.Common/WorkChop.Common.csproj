@@ -45,7 +45,9 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ResponseViewModel\UserResponseModel.cs" />
     <Compile Include="ViewModel\BaseErrorModel.cs" />
+    <Compile Include="ViewModel\CourseViewModel.cs" />
     <Compile Include="ViewModel\LoginViewModel.cs" />
+    <Compile Include="ViewModel\UserCourseMappingViewModel.cs" />
     <Compile Include="ViewModel\UserViewModel.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

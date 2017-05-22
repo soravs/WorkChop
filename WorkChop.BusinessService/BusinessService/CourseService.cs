@@ -3,8 +3,10 @@ using System.Collections.Generic;
 using WorkChop.BusinessService.IBusinessService;
 using WorkChop.DataModel.Models;
 using WorkChop.DataModel.Repository;
-using static WorkChop.Common.EnumUtil;
 using System.Linq;
+using WorkChop.Common.ViewModel;
+using AutoMapper;
+using static WorkChop.Common.EnumUtil;
 
 namespace WorkChop.BusinessService.BusinessService
 {
@@ -22,25 +24,47 @@ namespace WorkChop.BusinessService.BusinessService
         /// </summary>
         /// <param name="course"></param>
         /// <returns></returns>
-        public Course AddNewCourse(Course course)
+        public Course AddNewCourse(Course courseVM)
         {
-            course.CourseId = new Guid();
-            course.IsActive = true;
-            course.CreatedOn = DateTime.UtcNow;
-            course.UpdatedOn = DateTime.UtcNow;
-
-            // Set IsAssignee=true in UserCourseMapping table when add course 
-            //by teacher/someone
-            course.UserCourseMapping = new UserCourseMapping
+            try
             {
-                Fk_UserId = course.CreatedBy,
-                IsAssignee = true,
-                IsActive = true,
-                CreatedOn = DateTime.UtcNow,
-                UpdatedOn = DateTime.UtcNow
-            };
-            _unitOfwork.CourseRepository.Add(course);
-            return course;
+                courseVM.CourseId = new Guid();
+                courseVM.IsActive = true;
+                courseVM.CreatedOn = DateTime.UtcNow;
+                courseVM.UpdatedOn = DateTime.UtcNow;
+
+                // Set IsAssignee=true in UserCourseMapping table when add course 
+                //by teacher/someone
+                _unitOfwork.CourseRepository.Add(courseVM);
+                var userCourseMappingVM = new UserCourseMapping()
+                {
+                    Fk_CourseId = courseVM.CourseId,
+                    Fk_UserId = courseVM.CreatedBy,
+                    IsAssignee = true
+                };
+                AddUserCourseMapping(userCourseMappingVM);
+                return courseVM;
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
+        }
+
+        /// <summary>
+        /// Method to Add new user course mapping
+        /// </summary>
+        /// <param name="userCourseMappingVM"></param>
+        public UserCourseMapping AddUserCourseMapping(UserCourseMapping userCourseMappingVM)
+        {
+            userCourseMappingVM.UserCourseMappingId = new Guid();
+            userCourseMappingVM.IsActive = true;
+            userCourseMappingVM.CreatedOn = DateTime.UtcNow;
+            userCourseMappingVM.UpdateOn = DateTime.UtcNow;
+
+            _unitOfwork.UserCourseMappingRepository.Add(userCourseMappingVM);
+
+            return userCourseMappingVM;
         }
 
         /// <summary>
@@ -49,20 +73,42 @@ namespace WorkChop.BusinessService.BusinessService
         /// <param name="userId"></param>
         /// <param name="assigneeRoleId"></param>
         /// <returns></returns>
-        public List<Course> GetCoursesByFilter(Guid userId, int assigneeRoleId)
+        public List<UserCourseMappingViewModel> GetCoursesByFilter(Guid userId, int assigneeRoleId)
         {
-            var courseVM = _unitOfwork.CourseRepository.GetDbSet(x => x.CreatedBy == userId && x.IsActive);
-            switch (assigneeRoleId)
+            var userCourseMappingList = (from course in _unitOfwork.CourseRepository.GetAll()
+                                         join userCourseMapping in _unitOfwork.UserCourseMappingRepository.GetAll()
+                                         on course.CourseId equals userCourseMapping.Fk_CourseId
+                                         where userCourseMapping.Fk_UserId == userId
+                                         select new UserCourseMappingViewModel
+                                         {
+                                             UserCourseMappingId = userCourseMapping.UserCourseMappingId,
+                                             Fk_UserId = userCourseMapping.Fk_UserId,
+                                             Fk_CourseId = userCourseMapping.Fk_CourseId,
+                                             CourseName = course.CourseName,
+                                             CourseCreatedDays = (DateTime.UtcNow - course.CreatedOn).TotalDays,
+                                             IsActive = course.IsActive,
+                                             IsAssignee= userCourseMapping.IsAssignee
+                                         }).ToList();
+
+            foreach (var userCourseMapping in userCourseMappingList)
             {
-                case (int)AssigneeRole.Enrolled:
-                    return courseVM.Where(x=>x.UserCourseMapping.IsAssignee==false).ToList();
+                switch (assigneeRoleId)
+                {
+                    case (int)AssigneeRole.Enrolled:
+                        userCourseMapping.UserType = "Enrolled";
+                        break;
 
-                case (int)AssigneeRole.Self:
-                    return courseVM.Where(x => x.UserCourseMapping.IsAssignee == true).ToList();
 
-                default:
-                    return courseVM.ToList();
+                    case (int)AssigneeRole.Self:
+                        userCourseMapping.UserType = "Owner";
+                        break;
+
+                    default:
+                        userCourseMapping.UserType = userCourseMapping.IsAssignee ? "Owner" : "Enrolled";
+                        break;
+                }
             }
-        }
+            return userCourseMappingList;
+           }
     }
 }

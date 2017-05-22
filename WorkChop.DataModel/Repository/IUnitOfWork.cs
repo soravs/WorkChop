@@ -6,7 +6,7 @@ namespace WorkChop.DataModel.Repository
     {
         #region Properties
         /// <summary>
-        /// UserRepository
+        /// User Repository
         /// </summary>
         IRepository<User> UserRepository { get; }
 
@@ -19,6 +19,11 @@ namespace WorkChop.DataModel.Repository
         /// Course Repository
         /// </summary>
         IRepository<Course> CourseRepository { get; }
+
+        /// <summary>
+        /// User Course Mapping Repository
+        /// </summary>
+        IRepository<UserCourseMapping> UserCourseMappingRepository { get; }
         #endregion
     }
 }

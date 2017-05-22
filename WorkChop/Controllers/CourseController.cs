@@ -47,5 +47,13 @@ namespace WorkChop.Controllers
             var res = _courseService.GetCoursesByFilter(userId, assigneeRoleId);
             return Request.CreateResponse(HttpStatusCode.Created, res);
         }
+
+        [HttpPost]
+        [Route("addusercoursemapping")]
+        public HttpResponseMessage AddUserCourseMapping(UserCourseMapping userCourseMappingVM)
+        {
+            var res = _courseService.AddUserCourseMapping(userCourseMappingVM);
+            return Request.CreateResponse(HttpStatusCode.Created, res);
+        }
     }
 }
