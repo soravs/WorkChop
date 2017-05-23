@@ -325,15 +325,7 @@
         border-color: #57c4ba !important;
     }
 
-.btn-green-full {
-    color: #fff !important;
-    border-color: #57c4ba !important;
-    border-radius: 100px;
-    background: #57c4ba !important;
-    margin-left: 15px;
-    font-family: 'roboto.regular';
-    font-size: 13px;
-}
+
 
 .btn.active.focus, .btn.active:focus, .btn.focus, .btn:active.focus, .btn:active:focus, .btn:focus {
     outline: none;
@@ -731,23 +723,7 @@ textarea {
     font-size: 14px;
 }
 
-.floating-group__label--empty {
-    position: absolute;
-    color: #969696 !important;
-    animation-name: slideIn;
-    animation-duration: 250ms;
-    animation-timing-function: cubic-bezier(0.42, 0, 0.58, 1);
-    font-weight: normal;
-}
 
-.floating-group__label--occupied {
-    color: #777;
-    top: -18px;
-    font-size: 12px;
-    animation-name: slideOut;
-    animation-duration: 200ms;
-    animation-timing-function: cubic-bezier(0.42, 0, 0.58, 1);
-}
 
 .floating-group__input {
     outline: 0;
@@ -1669,9 +1645,7 @@ textarea {
     background: #4a49fb;
 }
 
-.white-modal-title {
-    color: #fff;
-}
+
 /*stepbar*/
 .steps-bar {
     padding-top: 15px;

@@ -354,6 +354,7 @@ button.close {
     text-align: left;
     background: #faf9f9;
     border-radius: 0 0 4px 4px;
+    /*padding: 15px;*/
 }
 
 .modal-header {
@@ -426,4 +427,39 @@ button.close {
     background-color: #faf9f9;
     border-right: 1px solid #ddd;
     min-height: 100%;
+}
+
+.floating-group__label--empty {
+    position: absolute;
+    color: #969696 !important;
+    animation-name: slideIn;
+    animation-duration: 250ms;
+    animation-timing-function: cubic-bezier(0.42, 0, 0.58, 1);
+    font-weight: normal;
+}
+
+.floating-group__label--occupied {
+    color: #777;
+    top: -18px;
+    font-size: 12px;
+    animation-name: slideOut;
+    animation-duration: 200ms;
+    animation-timing-function: cubic-bezier(0.42, 0, 0.58, 1);
+}
+
+.btn-green-full {
+    color: #fff !important;
+    border-color: #57c4ba !important;
+    border-radius: 100px;
+    background: #57c4ba !important;
+    margin-left: 15px;
+    font-family: 'roboto.regular';
+    font-size: 13px;
+}
+
+@media only screen and (min-width: 767px) {
+    .modal-dialog {
+        width: 70%;
+        margin: 30px auto;
+    }
 }

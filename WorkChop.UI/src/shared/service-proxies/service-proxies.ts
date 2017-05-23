@@ -5,30 +5,53 @@ import { Http, Headers, Response, RequestOptionsArgs } from '@angular/http';
 import { Config } from '../../shared/AppConst';
 
 export const API_BASE_URL = Config.getEnvironmentVariable('endPoint');
+export const currentUserId = JSON.parse(localStorage.getItem('currentUser'));
+export const headers = new Headers({
+    "Authorization": "bearer " + currentUserId.token
+});
 
 @Injectable()
 export class CourseServiceProxy {
     protected jsonParseReviver: (key: string, value: any) => any = undefined;
-    
-    constructor(private _http: Http) { 
+
+    constructor(private _http: Http) {
     }
 
     getAllCourses(assignRoleId: number): Observable<any> {
-        var currentUser = JSON.parse(localStorage.getItem('currentUser'));
-        let url_ = API_BASE_URL + "/api/course/getcourses?userId=" + currentUser.userId + "&assigneeRoleId=" + assignRoleId;
+        let url_ = API_BASE_URL + "/api/course/getcourses?userId=" + currentUserId.userId + "&assigneeRoleId=" + assignRoleId;
         return this._http.request(url_, {
-            method: "get",
-            headers: new Headers({
-                "Authorization": "bearer " + currentUser.token
-            })
+            method: 'get',
+            headers: headers
         }).map((response) => {
             return this.processGetCurrentLoginInformations(response);
-            }).catch((response: any, caught: any) => {
+        }).catch((response: any, caught: any) => {
             if (response instanceof Response) {
                 try {
-                   return Observable.of(this.processGetCurrentLoginInformations(response));
+                    return Observable.of(this.processGetCurrentLoginInformations(response));
                 } catch (e) {
                     return <Observable<any>><any>Observable.throw(e);
+                }
+            } else
+                return <Observable<any>><any>Observable.throw(response);
+        });
+    }
+
+    addNewCourse(courseVM: any): Observable<any> {
+        debugger;
+        let url = API_BASE_URL + "/api/course/addnewcourse";
+        courseVM.createdBy = currentUserId.userId;
+        return this._http.request(url, {
+            method: 'post',
+            body: courseVM,
+            headers: headers
+        }).map((response) => {
+            return this.processGetCurrentLoginInformations(response);
+        }).catch((response: any, caught: any) => {
+            if (response instanceof Response) {
+                try {
+                    return Observable.of(this.processGetCurrentLoginInformations(response));
+                } catch (e) {
+                    return <Observable<any>><any>Observable.throw(response);
                 }
             } else
                 return <Observable<any>><any>Observable.throw(response);

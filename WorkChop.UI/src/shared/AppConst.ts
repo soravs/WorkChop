@@ -7,12 +7,12 @@
         switch (environment) {
             case 'localhost':
                 data = {
-                    endPoint: 'http://localhost:53027/'
+                    endPoint: 'http://localhost:53027'
                 };
                 break;
             default:
                 data = {
-                    endPoint: 'http://workchop.com/'
+                    endPoint: 'http://workchop.com'
                 };
         }
         return data[value];

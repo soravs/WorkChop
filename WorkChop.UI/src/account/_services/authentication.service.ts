@@ -17,7 +17,7 @@ export class AuthenticationService {
     }
 
     login(loginVM: any): Observable<boolean> {
-        return this.http.request(this.url + "api/user/signin", {
+        return this.http.request(this.url + "/api/user/signin", {
             method: 'post',
             body: JSON.stringify(loginVM),
             headers: new Headers({ 'Content-Type': 'application/json' })

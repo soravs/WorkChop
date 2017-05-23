@@ -11,13 +11,12 @@ import { CourseServiceProxy } from '../../shared/service-proxies/service-proxies
 })
 
 export class CourseDashboardComponent implements OnInit {
-    //today = new Date();
-    //oneDay = 24 * 60 * 60 * 1000; // hours*minutes*seconds*milliseconds
+    private courseVM: CourseViewModel;
     courses: any = [];
-    //createdDate: number;
     loggedInUserId: string;
     constructor(private _courseService: CourseServiceProxy) {
         this.loggedInUserId = JSON.parse(localStorage.getItem('UserID'));
+        this.courseVM = new CourseViewModel('');
     }
 
     ngOnInit() {
@@ -27,9 +26,24 @@ export class CourseDashboardComponent implements OnInit {
     getCourse(assignRoleId: number): void {
         this._courseService.getAllCourses(assignRoleId)
             .subscribe((result) => {
-                debugger;
                 this.courses = result;
             });
     }
 
+    addNewCourse(): void {
+        this._courseService.addNewCourse(this.courseVM)
+            .subscribe(result => {
+                if (result) {
+                    debugger;
+                } else {
+                    debugger;
+                }
+            }, error => {
+                debugger;
+            });
+    }
+}
+
+export class CourseViewModel {
+    constructor(public courseName: string) { }
 }
