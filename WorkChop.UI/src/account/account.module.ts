@@ -4,7 +4,7 @@ import { HttpModule} from '@angular/http';
 import { AccountRoutingModule } from './account-routing.module';
 import { AccountComponent } from './account.component';
 import { LoginComponent } from './login/login.component';
-import { AuthenticationService } from './_services/authentication.service';
+import { AuthenticationServiceProxy } from '../shared/service-proxies/service-proxies';
 import { CommonModule } from '@angular/common';
 
 @NgModule({
@@ -19,7 +19,7 @@ import { CommonModule } from '@angular/common';
         LoginComponent,
     ],
     providers: [
-        AuthenticationService
+        AuthenticationServiceProxy
     ]
 })
 export class AccountModule {

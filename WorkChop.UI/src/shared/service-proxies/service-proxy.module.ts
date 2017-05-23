@@ -4,7 +4,9 @@ import * as ApiServiceProxies from './service-proxies';
 
 @NgModule({
     providers: [
-        ApiServiceProxies.CourseServiceProxy
+        ApiServiceProxies.CourseServiceProxy,
+        ApiServiceProxies.AuthenticationServiceProxy,
+        ApiServiceProxies.CustomExceptionHandlingServiceProxy
     ]
 })
 export class ServiceProxyModule { }

@@ -192,8 +192,6 @@
     <TypeScriptCompile Include="src\app\app.component.ts" />
     <TypeScriptCompile Include="src\app\app.module.ts" />
     <TypeScriptCompile Include="src\account\login\login.component.ts" />
-    <TypeScriptCompile Include="src\account\_services\authentication.service.ts" />
-    <TypeScriptCompile Include="src\account\_services\index.ts" />
     <TypeScriptCompile Include="src\app\course-dashboard\course-dashboard.component.ts" />
     <TypeScriptCompile Include="src\environments\environment.prod.ts" />
     <TypeScriptCompile Include="src\environments\environment.ts" />

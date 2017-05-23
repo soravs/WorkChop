@@ -5,7 +5,7 @@
         </div>
         <div class="row no-margin serach-container">
             <div class="col-md-6 col-sm-6 text-right pull-right">
-                <input class="input-box-search" placeholder="Search Course" type="text" />
+                <input class="input-box-search" placeholder="Search Course" type="text" [(ngModel)]="searchCourseName"/>
             </div>
         </div>
     </div>
@@ -51,7 +51,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="col-md-3 col-sm-6 margin-top-25" *ngFor="let course of courses">
+                        <div class="col-md-3 col-sm-6 margin-top-25" *ngFor="let course of courses | filterBy:{CourseName:searchCourseName};">
                             <div class="row no-margin">
                                 <div class="col-md-12 course-container" [ngClass]="{'enrolled-container':course.UserType=='Enrolled'}">
                                     <div class="row no-margin">

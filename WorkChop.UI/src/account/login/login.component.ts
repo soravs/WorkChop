@@ -1,7 +1,7 @@
 ﻿import { Component, OnInit } from '@angular/core';
 import { Http, RequestOptions } from '@angular/http';
 import { Router } from '@angular/router';
-import { AuthenticationService } from '../_services/authentication.service';
+import { AuthenticationServiceProxy } from '../../shared/service-proxies/service-proxies';
 
 @Component({
     selector: 'app-login-route',
@@ -18,7 +18,7 @@ export class LoginComponent implements OnInit {
     constructor(
         private _http: Http,
         private _router: Router,
-        private _authenticationService: AuthenticationService) {
+        private _authenticationService: AuthenticationServiceProxy) {
         this.loginVM = new LoginViewModel('','');
     }
 

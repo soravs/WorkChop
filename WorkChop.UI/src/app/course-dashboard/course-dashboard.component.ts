@@ -34,12 +34,9 @@ export class CourseDashboardComponent implements OnInit {
         this._courseService.addNewCourse(this.courseVM)
             .subscribe(result => {
                 if (result) {
-                    debugger;
                 } else {
-                    debugger;
                 }
             }, error => {
-                debugger;
             });
     }
 }
