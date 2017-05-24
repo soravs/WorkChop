@@ -8,11 +8,13 @@ import { CourseDashboardComponent } from './course-dashboard/course-dashboard.co
 import { AppRouteGuard } from '../shared/auth/auth-route-guard';
 import { ServiceProxyModule } from '../shared/service-proxies/service-proxy.module'
 import { ModalModule } from 'ng2-bootstrap';
+import { FilterPipe } from '../shared/filter/pipe';
 
 @NgModule({
     declarations: [
         AppComponent,
-        CourseDashboardComponent
+        CourseDashboardComponent,
+        FilterPipe
     ],
     imports: [
         FormsModule,

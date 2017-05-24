@@ -37,18 +37,23 @@ namespace WorkChop.DataModel.Repository
         void Add(TEntity entity);
 
         /// <summary>
-        /// Generic update method to delete record on the basis of id 
+        /// Generic update method to delete record on the basis of integer id 
         /// </summary>
         /// <param name="queryExpression"></param>
         /// <param name="id"></param>
         /// <param name="entity"></param>
         void Update(Expression<Func<TEntity, int>> queryExpression, int id, TEntity entity);
-      
         /// <summary>
-        /// Generic delete method to delete record on the basis of id  
+        /// Update with entity
         /// </summary>
-        /// <param name="queryExpression"></param>
-        /// <param name="id"></param>
+        /// <param name="entity"></param>
+        /// <returns></returns>
+        TEntity Update(TEntity entity);
+       /// <summary>
+       /// Generic delete method to delete record on the basis of id  
+       /// </summary>
+       /// <param name="queryExpression"></param>
+       /// <param name="id"></param>
         void Delete(Expression<Func<TEntity, int>> queryExpression, int id);
 
         /// <summary>

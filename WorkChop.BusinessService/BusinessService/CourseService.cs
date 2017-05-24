@@ -85,17 +85,19 @@ namespace WorkChop.BusinessService.BusinessService
                     isAssignee = true;
                     break;
             }
-            var userCourseMappingList = (from course in _unitOfwork.CourseRepository.GetAll()
+          
+            var userCourseMappingList = (from course in _unitOfwork.CourseRepository.GetAll().Where(x=>x.DeletedOn==null)
                                          join userCourseMapping in _unitOfwork.UserCourseMappingRepository.GetAll()
                                          on course.CourseId equals userCourseMapping.Fk_CourseId
                                          where userCourseMapping.Fk_UserId == userId &&  assignRoleId == 1 ? 1 == 1 : userCourseMapping.IsAssignee == isAssignee
+                                        // && course.DeletedOn == null
                                          select new UserCourseMappingViewModel
                                          {
                                              UserCourseMappingId = userCourseMapping.UserCourseMappingId,
                                              Fk_UserId = userCourseMapping.Fk_UserId,
                                              Fk_CourseId = userCourseMapping.Fk_CourseId,
                                              CourseName = course.CourseName,
-                                             CourseCreatedDays = (DateTime.UtcNow - course.CreatedOn).TotalDays,
+                                             CourseCreatedDays =(int)(DateTime.UtcNow - course.CreatedOn).TotalDays,
                                              IsActive = course.IsActive,
                                              IsAssignee = userCourseMapping.IsAssignee,
                                              UserType = userCourseMapping.IsAssignee ? "Owner" : "Enrolled"
@@ -120,6 +122,33 @@ namespace WorkChop.BusinessService.BusinessService
             //    //}
             //}
             return userCourseMappingList;
+        }
+
+        /// <summary>
+        /// Delete Course
+        /// </summary>
+        /// <param name="CourseId"></param>
+        /// <returns></returns>
+        public BaseViewModel DeleteCourse(Guid courseId)
+        {
+            try
+            {
+                var getCourse = _unitOfwork.CourseRepository.Get(courseId);
+                
+                if (getCourse != null)
+                {
+                    getCourse.DeletedOn = DateTime.UtcNow;
+                    getCourse.UpdatedOn = DateTime.UtcNow;
+                    _unitOfwork.CourseRepository.Update(getCourse);
+
+                    return new BaseViewModel { HasError = false, ErrorMessage = string.Empty };
+                }
+                return new BaseViewModel { HasError = true, ErrorMessage = "Course not found" };
+            }
+            catch(Exception ex)
+            {
+                return new BaseViewModel { HasError = true, ErrorMessage = ex.Message };
+            }
         }
     }
 }

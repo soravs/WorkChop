@@ -1,6 +1,7 @@
 ﻿using MongoDB.Bson.Serialization.Attributes;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace WorkChop.DataModel.Models
 {
@@ -9,6 +10,7 @@ namespace WorkChop.DataModel.Models
         [BsonId]
         [BsonElement("_id")]
         public Guid CourseId { get; set; }
+        [Required]
         public string CourseName { get; set; }
         public bool IsActive { get; set; }
         public Guid CreatedBy { get; set; }

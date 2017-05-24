@@ -1,6 +1,7 @@
 ﻿using MongoDB.Driver;
 using MongoDB.Driver.Builders;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 
@@ -78,6 +79,30 @@ namespace WorkChop.DataModel.Repository
         {
             var query = Query<TEntity>.EQ(queryExpression, id);
             _collection.Update(query, Update<TEntity>.Replace(entity));
+        }
+
+        /// <summary>
+        /// Upserts an entity.
+        /// </summary>
+        /// <param name="entity">The entity.</param>
+        /// <returns>The updated entity.</returns>
+        public virtual TEntity Update(TEntity entity)
+        {
+            this._collection.Save<TEntity>(entity);
+
+            return entity;
+        }
+
+        /// <summary>
+        /// Upserts the entities.
+        /// </summary>
+        /// <param name="entities">The entities to update.</param>
+        public virtual void Update(IEnumerable<TEntity> entities)
+        {
+            foreach (TEntity entity in entities)
+            {
+                this._collection.Save<TEntity>(entity);
+            }
         }
 
         /// <summary>

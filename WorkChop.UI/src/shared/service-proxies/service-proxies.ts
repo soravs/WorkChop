@@ -8,7 +8,6 @@ export const API_BASE_URL = Config.getEnvironmentVariable('endPoint');
 
 @Injectable()
 export class AuthenticationServiceProxy {
-    debugger;
     private token: string;
     private currentUser = JSON.parse(localStorage.getItem('currentUser'));
 
@@ -18,14 +17,12 @@ export class AuthenticationServiceProxy {
     }
 
     login(loginVM: any): Observable<boolean> {
-        debugger;
         let url = API_BASE_URL + "/api/user/signin";
         return this._http.request(url, {
             method: 'post',
             body: JSON.stringify(loginVM),
             headers: new Headers({ 'Content-Type': 'application/json' })
         }).map((response: Response) => {
-            debugger;
             // login successful if there's a jwt token in the response
             let result = response.json();
             if (result.TokenModel != null) {
@@ -93,6 +90,26 @@ export class CourseServiceProxy {
             headers: this.headers
         }).map((response) => {
             return this.customExceptionHandling.processGetCurrentLoginInformations(response);
+            }).catch((response: any, caught: any) => {
+            if (response instanceof Response) {
+                try {
+                    return Observable.of(this.customExceptionHandling.processGetCurrentLoginInformations(response));
+                } catch (e) {
+                    return <Observable<any>><any>Observable.throw(response);
+                }
+            } else
+                return <Observable<any>><any>Observable.throw(response);
+        });
+    }
+
+    deleteCourse(courseId: string): Observable<any> {
+        let url = API_BASE_URL + "/api/course/deletecourse?courseId=" + courseId;
+        
+        return this._http.request(url, {
+            method: 'get',
+            headers: this.headers
+        }).map((response) => {
+            return this.customExceptionHandling.processGetCurrentLoginInformations(response);
         }).catch((response: any, caught: any) => {
             if (response instanceof Response) {
                 try {
@@ -105,7 +122,6 @@ export class CourseServiceProxy {
         });
     }
 
-
 }
 
 export class CustomExceptionHandlingServiceProxy {
@@ -114,8 +130,7 @@ export class CustomExceptionHandlingServiceProxy {
     public processGetCurrentLoginInformations(response: Response): any {
         const responseText = response.text();
         const status = response.status;
-
-        if (status === 201) {
+        if (status >= 200 && status <= 299) {
             let result200: any = null;
             let resultData200 = responseText === "" ? null : JSON.parse(responseText, this.jsonParseReviver);
             return resultData200;
@@ -128,8 +143,10 @@ export class CustomExceptionHandlingServiceProxy {
                 return errData401.Message;
             }
         }
-        else if (status === 200 && status < 300) {
-            this.throwException("An unexpected server error occurred.", status, responseText);
+        else {
+            let errData = responseText === "" ? null : JSON.parse(responseText, this.jsonParseReviver);
+            //this.throwException("An unexpected server error occurred.", status, responseText);
+            alert(errData.Message);
         }
         return null;
     }

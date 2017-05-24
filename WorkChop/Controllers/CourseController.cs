@@ -48,11 +48,30 @@ namespace WorkChop.Controllers
             return Request.CreateResponse(HttpStatusCode.Created, res);
         }
 
+        /// <summary>
+        ///  add user course mapping
+        /// </summary>
+        /// <param name="userCourseMappingVM"></param>
+        /// <returns></returns>
         [HttpPost]
         [Route("addusercoursemapping")]
         public HttpResponseMessage AddUserCourseMapping(UserCourseMapping userCourseMappingVM)
         {
             var res = _courseService.AddUserCourseMapping(userCourseMappingVM);
+            return Request.CreateResponse(HttpStatusCode.Created, res);
+        }
+
+        /// <summary>
+        /// delete course
+        /// </summary>
+        /// <param name="courseId"></param>
+        /// <returns></returns>
+        /// 
+        [HttpGet]
+        [Route("deletecourse")]
+        public HttpResponseMessage DeleteCourse(string courseId)
+        {
+            var res = _courseService.DeleteCourse(Guid.Parse(courseId));
             return Request.CreateResponse(HttpStatusCode.Created, res);
         }
     }
