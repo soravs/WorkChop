@@ -21,7 +21,7 @@
             <div class="tab-content m-p-l-r-10 p-l-r-15 course-page">
                 <div id="all" class="tab-pane fade in active">
                     <div class="row no-margin">
-                        <div class="col-md-3 col-sm-6 margin-top-25">
+                        <div class="col-md-3 col-sm-6 margin-top-25" *ngIf="hideEnrolledDiv">
                             <div class="row no-margin">
                                 <div class="col-md-12 add-course-container">
                                     <div class="row no-margin">
@@ -54,28 +54,33 @@
                         <div class="col-md-3 col-sm-6 margin-top-25" *ngFor="let course of courses | FilterPipe:searchCourseName">
                             <div class="row no-margin">
                                 <div class="col-md-12 course-container" [ngClass]="{'enrolled-container':course.UserType=='Enrolled'}">
-                                    <div class="row no-margin">
-                                        <div class="col-xs-3 padding-0 visible-xs">
-                                            <img class="addcourse-img" src="../../assets/images/Asset 4.png" />
-                                        </div>
-                                        <div class="col-lg-12 col-lg-offset-0 col-md-12 col-md-offset-0 col-sm-12 col-sm-offset-0 col-xs-8 col-xs-offset-4 padding-0">
-                                            <div class="btn owner-section">{{course.UserType}}</div>
-                                        </div>
-                                        <div class="col-lg-12 col-lg-offset-0 col-md-12 col-md-offset-0 col-sm-12 col-sm-offset-0 col-xs-8 col-xs-offset-4 padding-0">
-                                            <div class="no-margin course-div">{{course.CourseName}}</div>
-                                        </div>
-
-                                    </div>
-                                    <div class="row no-margin">
-                                        <div class="col-lg-12 col-lg-offset-0 col-md-12 col-md-offset-0 col-sm-12 col-sm-offset-0 col-xs-8 col-xs-offset-4 padding-0">
-                                            <div class="Created-day">Created {{course.CourseCreatedDays}} days ago</div>
+                                    <div  (click)="getCourseSetting(course.Fk_CourseId)">
+                                        <div class="row no-margin">
+                                            <div class="col-xs-3 padding-0 visible-xs">
+                                                <img class="addcourse-img" src="../../assets/images/Asset 4.png" />
+                                            </div>
+                                            <div class="col-lg-12 col-lg-offset-0 col-md-12 col-md-offset-0 col-sm-12 col-sm-offset-0 col-xs-8 col-xs-offset-4 padding-0">
+                                                <div class="btn owner-section">{{course.UserType}}</div>
+                                            </div>
+                                            <div class="col-lg-12 col-lg-offset-0 col-md-12 col-md-offset-0 col-sm-12 col-sm-offset-0 col-xs-8 col-xs-offset-4 padding-0">
+                                                <div class="no-margin course-div">{{course.CourseName}}</div>
+                                            </div>
 
                                         </div>
+                                        <div class="row no-margin">
+                                            <div class="col-lg-12 col-lg-offset-0 col-md-12 col-md-offset-0 col-sm-12 col-sm-offset-0 col-xs-8 col-xs-offset-4 padding-0">
+                                                <div class="Created-day">Created {{course.CourseCreatedDays}} days ago</div>
+
+                                            </div>
+                                        </div>
+                                        <div class="row no-margin">
+                                            <div class="col-md-12 col-sm-12 hidden-xs text-center padding-0 height-100px margin-top-20">
+                                                <img class="addcourse-img" src="../../assets/images/Asset 4.png" />
+                                            </div>
+
+                                        </div>
                                     </div>
                                     <div class="row no-margin">
-                                        <div class="col-md-12 col-sm-12 hidden-xs text-center padding-0 height-100px margin-top-20">
-                                            <img class="addcourse-img" src="../../assets/images/Asset 4.png" />
-                                        </div>
                                         <div class="col-md-12 col-sm-12 col-xs-12 padding-0">
                                             <div class="dropdown">
                                                 <div class="dropdown-toggle dropdown-setting" data-toggle="dropdown">
@@ -84,13 +89,13 @@
                                                 <ul class="dropdown-menu">
                                                     <li>
                                                         <div *ngIf="course.IsAssignee; then owner else enroll"></div>
-                                                        <ng-template #owner>   
+                                                        <ng-template #owner>
                                                             <a class="padding-0">
                                                                 <div type="button" class="btn btn-red" (click)="deleteCourse(course.Fk_CourseId)">DELETE</div>
                                                             </a>
                                                         </ng-template>
-                                                        <ng-template #enroll> 
-                                                             <a class="padding-0">
+                                                        <ng-template #enroll>
+                                                            <a class="padding-0">
                                                                 <div type="button" class="btn btn-red" (click)="leaveCourse(course.UserCourseMappingId)">LEAVE</div>
                                                             </a>
                                                         </ng-template>
@@ -100,23 +105,7 @@
                                             </div>
                                         </div>
                                     </div>
-
-                                    <div class="course-hover">
-                                        <a href="setting_course.html">
-                                            <div class="row no-margin">
-
-                                                <div class="col-md-11 col-sm-11 col-xs-11 padding-0 hover-content">
-
-
-                                                </div>
-
-                                            </div>
-                                        </a>
-                                    </div>
-
-
                                 </div>
-
                             </div>
                         </div>
                     </div>
@@ -145,76 +134,7 @@
                         </div>
                     </div>
                 </div>
-                <div id="enrolledcourse" class="tab-pane fade">
-                    <div class="row no-margin"></div>
-                    <div class="col-md-3 col-sm-6 margin-top-25" *ngFor="let course of courses| FilterPipe:searchCourseName">
-                        <div class="row no-margin">
-                            <div class="col-md-12 course-container" [ngClass]="{'enrolled-container':course.UserType=='Enrolled'}">
-                                <div class="row no-margin">
-                                    <div class="col-xs-3 padding-0 visible-xs">
-                                        <img class="addcourse-img" src="../../assets/images/Asset 4.png" />
-                                    </div>
-                                    <div class="col-lg-12 col-lg-offset-0 col-md-12 col-md-offset-0 col-sm-12 col-sm-offset-0 col-xs-8 col-xs-offset-4 padding-0">
-                                        <div class="btn owner-section">{{course.UserType}}</div>
-                                    </div>
-                                    <div class="col-lg-12 col-lg-offset-0 col-md-12 col-md-offset-0 col-sm-12 col-sm-offset-0 col-xs-8 col-xs-offset-4 padding-0">
-                                        <div class="no-margin course-div">{{course.CourseName}}</div>
-                                    </div>
-
-                                </div>
-                                <div class="row no-margin">
-                                    <div class="col-lg-12 col-lg-offset-0 col-md-12 col-md-offset-0 col-sm-12 col-sm-offset-0 col-xs-8 col-xs-offset-4 padding-0">
-                                        <div class="Created-day">Created {{course.CourseCreatedDays}} days ago</div>
-
-                                    </div>
-                                </div>
-                                <div class="row no-margin">
-                                    <div class="col-md-12 col-sm-12 hidden-xs text-center padding-0 height-100px margin-top-20">
-
-                                        <img class="addcourse-img" src="../../assets/images/Asset 4.png" />
-
-
-                                    </div>
-                                    <div class="col-md-12 col-sm-12 col-xs-12 padding-0">
-                                        <div class="dropdown">
-                                            <div class="dropdown-toggle dropdown-setting" data-toggle="dropdown">
-                                                <div class="fa-ellipsis"></div>
-                                            </div>
-                                            <ul class="dropdown-menu">
-                                                <!--<li><button type="button" class="btn btn-edit">EDIT</button></li>-->
-                                                <li>
-                                                    <a href="overview_course-empty.html" class="padding-0">
-                                                        <div type="button" class="btn btn-red">DELETE</div>
-                                                    </a>
-                                    
-
-                                                </li>
-
-                                            </ul>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div class="course-hover">
-                                    <a href="setting_course.html">
-                                        <div class="row no-margin">
-
-                                            <div class="col-md-11 col-sm-11 col-xs-11 padding-0 hover-content">
-
-
-                                            </div>
-
-                                        </div>
-                                    </a>
-                                </div>
-
-
-                            </div>
-
-                        </div>
-
-                    </div>
-                </div>
+                
             </div>
         </div>
     </div>

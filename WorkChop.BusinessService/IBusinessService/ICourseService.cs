@@ -11,5 +11,6 @@ namespace WorkChop.BusinessService.IBusinessService
         List<UserCourseMappingViewModel> GetCoursesByFilter(Guid userId, int assigneeRoleId);
         UserCourseMapping AddUserCourseMapping(UserCourseMapping userCourseMappingVM);
         BaseViewModel DeleteCourse(Guid CourseId);
+        BaseViewModel LeaveCourse(Guid UsercourseMappingId);
     }
 }

@@ -24,7 +24,7 @@ namespace WorkChop.DataModel.Models
         public Nullable<DateTime> DeletedOn { get; set; }
 
         public List<UserCourseMapping> UserCourseMapping { get; set; }
-        public UserRoleMapping UserRoleMapping { get; set; }
+       // public UserRoleMapping UserRoleMapping { get; set; }
 
     }
 }

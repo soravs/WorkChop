@@ -24,6 +24,10 @@ namespace WorkChop.DataModel.Repository
         /// User Course Mapping Repository
         /// </summary>
         IRepository<UserCourseMapping> UserCourseMappingRepository { get; }
+        /// <summary>
+        /// User Role Relation Repository
+        /// </summary>
+        IRepository<UserRoleMapping> UserRoleRelationRepository { get; }
         #endregion
     }
 }

@@ -12,7 +12,7 @@ namespace WorkChop.DataModel.Models
         public Guid CourseId { get; set; }
         [Required]
         public string CourseName { get; set; }
-        public bool IsActive { get; set; }
+       // public bool IsActive { get; set; }
         public Guid CreatedBy { get; set; }
         public DateTime CreatedOn { get; set; }
         public DateTime UpdatedOn { get; set; }

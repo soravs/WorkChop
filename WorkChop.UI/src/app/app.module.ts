@@ -15,7 +15,7 @@ import { FilterPipe } from '../shared/filter/pipe';
         AppComponent,
         CourseDashboardComponent,
         FilterPipe
-    ],
+    ],   
     imports: [
         FormsModule,
         CommonModule,

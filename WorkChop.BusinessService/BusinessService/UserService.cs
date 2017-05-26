@@ -59,14 +59,17 @@ namespace WorkChop.BusinessService.BusinessService
             userVM.UserID = new Guid();
             userVM.CreatedOn = DateTime.UtcNow;
             userVM.UpdatedOn = DateTime.UtcNow;
-
-            userVM.UserRoleMapping = new UserRoleMapping()
-            {
-                CreatedOn=DateTime.UtcNow,
-                Fk_RoleId=(int)UserRoleEnum.Teacher
-            };
-
+            
             _unitOfwork.UserRepository.Add(userVM);
+
+            var userRoleMapping = new UserRoleMapping()
+            {
+                UserRoleMappingId = new Guid(),
+                Fk_UserId = userVM.UserID,
+                CreatedOn = DateTime.UtcNow,
+                Fk_RoleId = (int)UserRoleEnum.Teacher
+            };
+            _unitOfwork.UserRoleRelationRepository.Add(userRoleMapping);
             return userVM;
         }
 
@@ -88,30 +91,31 @@ namespace WorkChop.BusinessService.BusinessService
         /// <returns></returns>
         public UserResponseModel GetUserByRole(LoginViewModel loginVM)
         {
+         
             var userData = new UserResponseModel();
-            var userList = _unitOfwork.UserRepository.GetDbSet(x => x.Email == loginVM.UserName).ToList();
+            var getUserData = (from user in _unitOfwork.UserRepository.GetAll()
+                               join roleRelation in _unitOfwork.UserRoleRelationRepository.GetAll() on user.UserID equals roleRelation.Fk_UserId
+                               join role in _unitOfwork.UserRoleRepository.GetAll() on roleRelation.Fk_RoleId equals role.RoleId
+                               where user.Email == loginVM.UserName
+                               select new { UserResponseModel = user, RoleResponseModel = role }).ToList();
 
-            if (userList.Count == 0)
+            if (getUserData.Count > 0)
             {
-                userData.HasError = true;
-                userData.ErrorMessage = "User not found";
+                AutoMapper.Mapper.CreateMap<User, UserResponseModel>();
+                userData = AutoMapper.Mapper.Map<User, UserResponseModel>(getUserData.FirstOrDefault().UserResponseModel);
+                userData.RoleResponseModel = new List<RoleResponseModel>();
+                foreach (var itemData in getUserData)
+                {
+                    AutoMapper.Mapper.CreateMap<UserRole, RoleResponseModel>();
+                    var roleData = AutoMapper.Mapper.Map<UserRole, RoleResponseModel>(itemData.RoleResponseModel);
+                    userData.RoleResponseModel.Add(roleData);
+                }
+                userData.HasError = false;
+                userData.ErrorMessage = string.Empty;
                 return userData;
             }
-            AutoMapper.Mapper.CreateMap<User, UserResponseModel>();
-            userData = AutoMapper.Mapper.Map<User, UserResponseModel>(userList.FirstOrDefault());
-            userData.RoleResponseModel = new List<RoleResponseModel>();
-            foreach (var itemData in userList)
-            {
-                if (itemData.UserRoleMapping != null)
-                {
-                    var userRoleVM = new RoleResponseModel();
-                    userRoleVM.RoleId = itemData.UserRoleMapping.Fk_RoleId;
-                    userRoleVM.RoleName = ((UserRoleEnum)itemData.UserRoleMapping.Fk_RoleId).ToString();
-                    userData.RoleResponseModel.Add(userRoleVM);
-                }
-            }
-            userData.HasError = false;
-            userData.ErrorMessage = string.Empty;
+            userData.HasError = true;
+            userData.ErrorMessage = "User not found";
             return userData;
         }
     }

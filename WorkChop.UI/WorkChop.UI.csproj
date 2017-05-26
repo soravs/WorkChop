@@ -143,6 +143,10 @@
     <Content Include="src\assets\images\raise-your-hand-to-askSelected.png" />
     <Content Include="src\assets\images\serachicon.png" />
     <Content Include="src\assets\images\workchoplogoone.svg" />
+    <Content Include="src\course\course.component.css" />
+    <Content Include="src\course\course.component.html" />
+    <Content Include="src\course\setting\setting.component.css" />
+    <Content Include="src\course\setting\setting.component.html" />
     <Content Include="src\favicon.ico" />
     <Content Include="src\assets\images\Background_Login2.jpg" />
     <Content Include="src\assets\images\workchoplogo.png" />
@@ -193,6 +197,10 @@
     <TypeScriptCompile Include="src\app\app.module.ts" />
     <TypeScriptCompile Include="src\account\login\login.component.ts" />
     <TypeScriptCompile Include="src\app\course-dashboard\course-dashboard.component.ts" />
+    <TypeScriptCompile Include="src\course\course-routing.module.ts" />
+    <TypeScriptCompile Include="src\course\course.component.ts" />
+    <TypeScriptCompile Include="src\course\course.module.ts" />
+    <TypeScriptCompile Include="src\course\setting\setting.component.ts" />
     <TypeScriptCompile Include="src\environments\environment.prod.ts" />
     <TypeScriptCompile Include="src\environments\environment.ts" />
     <TypeScriptCompile Include="src\main.ts" />

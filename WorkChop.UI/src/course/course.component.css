@@ -1,0 +1,20 @@
+﻿.sidebar.open {
+    left: 0;
+}
+
+.sidebar {
+    position: absolute;
+    min-height: 100vh;
+    width: calc(100% - 52px);
+    max-width: 250px;
+    transition: all .3s ease-in-out;
+    background: #faf9f9;
+    z-index: 998;
+    border-right: 1px solid #ddd;
+    font-family: 'Roboto-Medium';
+    font-size: 14px;
+}
+
+.menu-item-con .menu-item-head.active .name-icon {
+    color: #4a49fb !important;
+}

@@ -40,8 +40,9 @@ namespace WorkChop.Providers
 
             var identity = new ClaimsIdentity(context.Options.AuthenticationType);
             identity.AddClaim(new Claim(ClaimTypes.Name, context.UserName));
-            identity.AddClaim(new Claim(ClaimTypes.Role, "User"));
+            identity.AddClaim(new Claim(ClaimTypes.Role, "Teacher"));
        
+           
             props = new AuthenticationProperties(new Dictionary<string, string>
                 {
                     {
@@ -56,6 +57,7 @@ namespace WorkChop.Providers
                     {
                         "UserStatus", userManager.IsActive.ToString()
                     }
+                   
                   
                   });
 

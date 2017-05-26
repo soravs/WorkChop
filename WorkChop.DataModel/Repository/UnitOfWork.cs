@@ -24,6 +24,8 @@ namespace WorkChop.DataModel.Repository
 
         protected IRepository<UserCourseMapping> _userCourseMapping;
 
+        protected IRepository<UserRoleMapping> _userRoleMapping;
+
         #endregion
 
         #region Methods
@@ -43,6 +45,13 @@ namespace WorkChop.DataModel.Repository
         public IRepository<User> UserRepository
         {
             get { return _users ?? (_users = new Repository<User>(_database,"User")); }
+        }
+        /// <summary>
+        /// 
+        /// </summary>
+        public IRepository<UserRoleMapping> UserRoleRelationRepository
+        {
+            get { return _userRoleMapping ?? (_userRoleMapping = new Repository<UserRoleMapping>(_database, "UserRoleMapping")); }
         }
 
         /// <summary>

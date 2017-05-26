@@ -8,7 +8,7 @@ using WorkChop.Filters;
 
 namespace WorkChop.Controllers
 {
-    [Authorize]
+    //[Authorize(Roles ="Teacher")]
     [HandleApiException]
     [ValidateModel]
     [RoutePrefix("api/course")]
@@ -72,6 +72,18 @@ namespace WorkChop.Controllers
         public HttpResponseMessage DeleteCourse(string courseId)
         {
             var res = _courseService.DeleteCourse(Guid.Parse(courseId));
+            return Request.CreateResponse(HttpStatusCode.Created, res);
+        }
+        /// <summary>
+        /// Leave Course
+        /// </summary>
+        /// <param name="usercourseMappingId"></param>
+        /// <returns></returns>
+        [HttpGet]
+        [Route("leavecourse")]
+        public HttpResponseMessage LeaveCourse(string usercourseMappingId)
+        {
+            var res = _courseService.LeaveCourse(Guid.Parse(usercourseMappingId));
             return Request.CreateResponse(HttpStatusCode.Created, res);
         }
     }

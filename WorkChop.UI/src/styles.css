@@ -386,9 +386,7 @@
     background: url('assets/images/homeSelected.png') no-repeat right;
 }
 
-.menu-item-con .menu-item-head.active .name-icon {
-    color: #4a49fb !important;
-}
+
 
 .menu-item-con .submenu-three .announcement-icon {
     background: url('assets/images/megaphoneA.png') no-repeat right;

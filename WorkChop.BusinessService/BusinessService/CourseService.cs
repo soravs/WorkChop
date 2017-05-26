@@ -29,7 +29,7 @@ namespace WorkChop.BusinessService.BusinessService
             try
             {
                 courseVM.CourseId = new Guid();
-                courseVM.IsActive = true;
+               // courseVM.IsActive = true;
                 courseVM.CreatedOn = DateTime.UtcNow;
                 courseVM.UpdatedOn = DateTime.UtcNow;
 
@@ -87,10 +87,9 @@ namespace WorkChop.BusinessService.BusinessService
             }
           
             var userCourseMappingList = (from course in _unitOfwork.CourseRepository.GetAll().Where(x=>x.DeletedOn==null)
-                                         join userCourseMapping in _unitOfwork.UserCourseMappingRepository.GetAll()
+                                         join userCourseMapping in _unitOfwork.UserCourseMappingRepository.GetAll().Where(x=>x.IsActive)
                                          on course.CourseId equals userCourseMapping.Fk_CourseId
-                                         where userCourseMapping.Fk_UserId == userId &&  assignRoleId == 1 ? 1 == 1 : userCourseMapping.IsAssignee == isAssignee
-                                        // && course.DeletedOn == null
+                                         where userCourseMapping.Fk_UserId == userId && assignRoleId == 1 ? 1 == 1 : userCourseMapping.IsAssignee == isAssignee
                                          select new UserCourseMappingViewModel
                                          {
                                              UserCourseMappingId = userCourseMapping.UserCourseMappingId,
@@ -98,29 +97,12 @@ namespace WorkChop.BusinessService.BusinessService
                                              Fk_CourseId = userCourseMapping.Fk_CourseId,
                                              CourseName = course.CourseName,
                                              CourseCreatedDays =(int)(DateTime.UtcNow - course.CreatedOn).TotalDays,
-                                             IsActive = course.IsActive,
+                                             IsActive = userCourseMapping.IsActive,
                                              IsAssignee = userCourseMapping.IsAssignee,
                                              UserType = userCourseMapping.IsAssignee ? "Owner" : "Enrolled"
                                          }).ToList();
 
-            //foreach (var userCourseMapping in userCourseMappingList)
-            //{
-            //    //switch (assigneeRoleId)
-            //    //{
-            //    //    case (int)AssigneeRole.Enrolled:
-            //    //        userCourseMapping.UserType = "Enrolled";
-            //    //        break;
-
-
-            //    //    case (int)AssigneeRole.Self:
-            //    //        userCourseMapping.UserType = "Owner";
-            //    //        break;
-
-            //    //    default:
-            //    //        userCourseMapping.UserType = userCourseMapping.IsAssignee ? "Owner" : "Enrolled";
-            //    //        break;
-            //    //}
-            //}
+        
             return userCourseMappingList;
         }
 
@@ -146,6 +128,32 @@ namespace WorkChop.BusinessService.BusinessService
                 return new BaseViewModel { HasError = true, ErrorMessage = "Course not found" };
             }
             catch(Exception ex)
+            {
+                return new BaseViewModel { HasError = true, ErrorMessage = ex.Message };
+            }
+        }
+        /// <summary>
+        /// Leave Course
+        /// </summary>
+        /// <param name="userCourseMappingId"></param>
+        /// <returns></returns>
+        public BaseViewModel LeaveCourse(Guid UserCourseMappingId)
+        {
+            try
+            {
+                var getCourseMapping = _unitOfwork.UserCourseMappingRepository.Get(UserCourseMappingId);
+
+                if (getCourseMapping != null)
+                {
+                    getCourseMapping.IsActive = false;
+                    getCourseMapping.UpdateOn = DateTime.UtcNow;
+                    _unitOfwork.UserCourseMappingRepository.Update(getCourseMapping);
+
+                    return new BaseViewModel { HasError = false, ErrorMessage = string.Empty };
+                }
+                return new BaseViewModel { HasError = true, ErrorMessage = "Course Mapping not found" };
+            }
+            catch (Exception ex)
             {
                 return new BaseViewModel { HasError = true, ErrorMessage = ex.Message };
             }

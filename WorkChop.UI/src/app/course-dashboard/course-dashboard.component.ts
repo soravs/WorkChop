@@ -11,11 +11,13 @@ import { FilterPipe } from '../../shared/filter/pipe';
 
 })
 export class CourseDashboardComponent implements OnInit {
-
+    temp: any;
     private courseVM: CourseViewModel;
+    public hideEnrolledDiv = true;
     courses: any = [];
     loggedInUserId: string;
-    constructor(private _courseService: CourseServiceProxy) {
+   
+    constructor(private _courseService: CourseServiceProxy, private _router: Router) {
         this.loggedInUserId = JSON.parse(localStorage.getItem('UserID'));
         this.courseVM = new CourseViewModel('');
     }
@@ -23,12 +25,19 @@ export class CourseDashboardComponent implements OnInit {
     ngOnInit() {
         this.getCourse(1);
     }
+    
 
     getCourse(assignRoleId: number): void {
+        debugger;
+        this.hideEnrolledDiv = true;
+        this.temp = assignRoleId;
         this._courseService.getAllCourses(assignRoleId)
             .subscribe((result) => {
                 this.courses = result;
             });
+        if (assignRoleId == 2) {
+            this.hideEnrolledDiv = false;
+        }
     }
 
     addNewCourse(): void {
@@ -45,15 +54,42 @@ export class CourseDashboardComponent implements OnInit {
     }
 
     deleteCourse(courseId: string): void {
-        this._courseService.deleteCourse(courseId)
-            .subscribe(result => {
-                if (result.HasError) {
-                    alert(result.ErrorMessage);
-                    return;
-                }
-                this.getCourse(1);
-            }, error => {
-            });
+       
+        var result = confirm("Are you sure want to delete the course?");
+        if (result) {
+            this._courseService.deleteCourse(courseId)
+                .subscribe(result => {
+                    if (result.HasError) {
+                        alert(result.ErrorMessage);
+                        return;
+                    }
+                    this.getCourse(this.temp);
+                }, error => {
+                });
+        }
+
+       
+    }
+
+    leaveCourse(userCourseMappingId: string): void {
+        var result = confirm("Are you sure want to leave the course?");
+        if (result) {
+            this._courseService.leaveCourse(userCourseMappingId)
+                .subscribe(result => {
+                    if (result.HasError) {
+                        alert(result.ErrorMessage);
+                        return;
+                    }
+                    this.getCourse(this.temp);
+                }, error => {
+                });
+        }
+      
+    }
+
+    getCourseSetting(courseId: string): void {
+        debugger;
+        this._router.navigate(['/course/setting']);
     }
 
 }

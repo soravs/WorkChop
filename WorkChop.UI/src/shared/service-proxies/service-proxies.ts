@@ -122,6 +122,25 @@ export class CourseServiceProxy {
         });
     }
 
+    leaveCourse(userCourseMappingId: string): Observable<any> {
+        let url = API_BASE_URL + "/api/course/leaveCourse?UserCourseMappingId=" + userCourseMappingId;
+
+        return this._http.request(url, {
+            method: 'get',
+            headers: this.headers
+        }).map((response) => {
+            return this.customExceptionHandling.processGetCurrentLoginInformations(response);
+        }).catch((response: any, caught: any) => {
+            if (response instanceof Response) {
+                try {
+                    return Observable.of(this.customExceptionHandling.processGetCurrentLoginInformations(response));
+                } catch (e) {
+                    return <Observable<any>><any>Observable.throw(response);
+                }
+            } else
+                return <Observable<any>><any>Observable.throw(response);
+        });
+    }
 }
 
 export class CustomExceptionHandlingServiceProxy {
@@ -146,7 +165,7 @@ export class CustomExceptionHandlingServiceProxy {
         else {
             let errData = responseText === "" ? null : JSON.parse(responseText, this.jsonParseReviver);
             //this.throwException("An unexpected server error occurred.", status, responseText);
-            alert(errData.Message);
+            console.log(errData.Message);
         }
         return null;
     }
