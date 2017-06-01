@@ -1,2 +1,23 @@
 ﻿body {
 }
+
+.sebm-google-map-container {
+    height: 300px;
+}
+
+input[type=file] {
+    display: none !important;
+}
+
+.fileUploader .alert {
+    margin-top: 5px;
+}
+
+.setting-section {
+    margin-top: 30px;
+}
+
+/*.setting-page {
+    overflow-y: auto;
+    max-height: 73vh;
+}*/

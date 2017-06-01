@@ -118,5 +118,37 @@ namespace WorkChop.BusinessService.BusinessService
             userData.ErrorMessage = "User not found";
             return userData;
         }
+        /// <summary>
+        /// Get User Role By User Id
+        /// </summary>
+        /// <param name="UserId"></param>
+        /// <returns></returns>
+        public List<UserRoleResponseModel> GetUserRoleByUserId(Guid UserId)
+        {
+            try
+            {
+                var getUserRoles = _unitOfwork.UserRoleRelationRepository.GetAll().Where(x => x.Fk_UserId == UserId).ToList();
+                AutoMapper.Mapper.CreateMap<UserRoleMapping, UserRoleResponseModel>();
+                var userRoleData = AutoMapper.Mapper.Map<List<UserRoleMapping>, List<UserRoleResponseModel>>(getUserRoles);
+                return userRoleData;
+            }
+            catch(Exception ex)
+            {
+                return null;
+            }
+       
+        }
+
+        public List<User> GetAllTeachers(string userId)
+        {
+            //(from user in _unitOfwork.UserRepository.GetAll().Where(a => a.UserID.ToString() != userId)
+            var getAllTeachers = (from user in _unitOfwork.UserRepository.GetAll()
+                               join userMapping in _unitOfwork.UserCourseMappingRepository.GetAll() on user.UserID equals userMapping.Fk_UserId
+                               where userMapping.IsAssignee
+                               select user).Distinct().ToList();
+
+
+            return getAllTeachers;
+        }
     }
 }

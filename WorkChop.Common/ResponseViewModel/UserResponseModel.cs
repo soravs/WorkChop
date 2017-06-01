@@ -32,5 +32,7 @@ namespace WorkChop.Common.ResponseViewModel
         public string expires_in { get; set; }
 
         public string userName { get; set; }
+
+        public string Roles { get; set; }
     }
 }

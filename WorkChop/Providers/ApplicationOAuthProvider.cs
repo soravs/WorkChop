@@ -22,6 +22,7 @@ namespace WorkChop.Providers
 
         public override async Task GrantResourceOwnerCredentials(OAuthGrantResourceOwnerCredentialsContext context)
         {
+            List<string> roles = new List<string>();
             context.OwinContext.Response.Headers.Add("Access-Control-Allow-Origin", new[] { "*" });
 
             var userManager = _userService.GetByQuery(context.UserName);
@@ -36,12 +37,20 @@ namespace WorkChop.Providers
                 context.SetError("invalid_Password");
                 return;
             }
+
+            var getRolesOfUser = _userService.GetUserRoleByUserId(userManager.UserID);
+
             var props = new AuthenticationProperties(new Dictionary<string, string>());
 
             var identity = new ClaimsIdentity(context.Options.AuthenticationType);
             identity.AddClaim(new Claim(ClaimTypes.Name, context.UserName));
-            identity.AddClaim(new Claim(ClaimTypes.Role, "Teacher"));
-       
+
+            foreach(var itemRole in getRolesOfUser)
+            {
+                identity.AddClaim(new Claim(ClaimTypes.Role, itemRole.RoleName));
+                roles.Add(itemRole.RoleName);
+            }
+            
            
             props = new AuthenticationProperties(new Dictionary<string, string>
                 {
@@ -56,9 +65,12 @@ namespace WorkChop.Providers
                     },
                     {
                         "UserStatus", userManager.IsActive.ToString()
+                    },
+                    {
+                        "Roles", string.Join(",", roles.ToArray())
                     }
-                   
-                  
+
+
                   });
 
 

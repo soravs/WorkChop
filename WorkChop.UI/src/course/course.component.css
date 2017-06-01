@@ -4,7 +4,7 @@
 
 .sidebar {
     position: absolute;
-    min-height: 100vh;
+    min-height: 100%;
     width: calc(100% - 52px);
     max-width: 250px;
     transition: all .3s ease-in-out;
@@ -17,4 +17,9 @@
 
 .menu-item-con .menu-item-head.active .name-icon {
     color: #4a49fb !important;
+}
+
+@media (min-width:767px)
+{
+    .main-container{padding-left:250px;}
 }

@@ -96,5 +96,16 @@ namespace WorkChop.Controllers
 
             return Request.CreateResponse(HttpStatusCode.OK, user);
         }
+
+        [Authorize]
+        [HttpGet]
+        [Route("getAllTeachers")]
+        public HttpResponseMessage GetAllTeachers(string userId)
+        {
+            var users = _userService.GetAllTeachers(userId);
+            if (users.Any()) return Request.CreateResponse(HttpStatusCode.OK, users);
+            return Request.CreateErrorResponse(HttpStatusCode.NotFound, "No users found.");
+        }
+
     }
 }

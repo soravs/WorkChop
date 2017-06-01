@@ -14,7 +14,8 @@ import { FilterPipe } from '../shared/filter/pipe';
     declarations: [
         AppComponent,
         CourseDashboardComponent,
-        FilterPipe
+        FilterPipe,
+        
     ],   
     imports: [
         FormsModule,
@@ -22,10 +23,10 @@ import { FilterPipe } from '../shared/filter/pipe';
         HttpModule,
         AppRoutingModule,
         ServiceProxyModule,
-        ModalModule.forRoot()
+        ModalModule.forRoot(),
     ],
     providers: [
-        AppRouteGuard
+        AppRouteGuard,
         
     ],
     bootstrap: [AppComponent]

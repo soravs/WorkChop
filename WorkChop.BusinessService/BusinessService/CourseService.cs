@@ -29,7 +29,7 @@ namespace WorkChop.BusinessService.BusinessService
             try
             {
                 courseVM.CourseId = new Guid();
-               // courseVM.IsActive = true;
+                // courseVM.IsActive = true;
                 courseVM.CreatedOn = DateTime.UtcNow;
                 courseVM.UpdatedOn = DateTime.UtcNow;
 
@@ -50,6 +50,37 @@ namespace WorkChop.BusinessService.BusinessService
                 return null;
             }
         }
+
+        /// <summary>
+        /// Update Course detail
+        /// </summary>
+        /// <param name="courseVM"></param>
+        /// <returns></returns>
+        public Course UpdateCourse(Course courseVM)
+        {
+            try
+            {
+                var courseDetail = _unitOfwork.CourseRepository.Get(courseVM.CourseId);
+                if (courseDetail != null)
+                {
+                    courseDetail.UpdatedOn = DateTime.UtcNow;
+                    courseDetail.CourseName = courseVM.CourseName;
+                    courseDetail.Description = courseVM.Description;
+                    courseDetail.ImageSrc = courseVM.ImageSrc;
+                    courseDetail.Latitude = courseVM.Latitude;
+                    courseDetail.Longitude = courseVM.Longitude;
+                    courseDetail.Location = courseVM.Location;
+                    _unitOfwork.CourseRepository.Update(courseDetail);
+                }
+                return courseVM;
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
+        }
+
+
 
         /// <summary>
         /// Method to Add new user course mapping
@@ -85,9 +116,9 @@ namespace WorkChop.BusinessService.BusinessService
                     isAssignee = true;
                     break;
             }
-          
-            var userCourseMappingList = (from course in _unitOfwork.CourseRepository.GetAll().Where(x=>x.DeletedOn==null)
-                                         join userCourseMapping in _unitOfwork.UserCourseMappingRepository.GetAll().Where(x=>x.IsActive)
+
+            var userCourseMappingList = (from course in _unitOfwork.CourseRepository.GetAll().Where(x => x.DeletedOn == null)
+                                         join userCourseMapping in _unitOfwork.UserCourseMappingRepository.GetAll().Where(x => x.IsActive)
                                          on course.CourseId equals userCourseMapping.Fk_CourseId
                                          where userCourseMapping.Fk_UserId == userId && assignRoleId == 1 ? 1 == 1 : userCourseMapping.IsAssignee == isAssignee
                                          select new UserCourseMappingViewModel
@@ -96,15 +127,34 @@ namespace WorkChop.BusinessService.BusinessService
                                              Fk_UserId = userCourseMapping.Fk_UserId,
                                              Fk_CourseId = userCourseMapping.Fk_CourseId,
                                              CourseName = course.CourseName,
-                                             CourseCreatedDays =(int)(DateTime.UtcNow - course.CreatedOn).TotalDays,
+                                             CourseCreatedDays = (int)(DateTime.UtcNow - course.CreatedOn).TotalDays,
                                              IsActive = userCourseMapping.IsActive,
                                              IsAssignee = userCourseMapping.IsAssignee,
                                              UserType = userCourseMapping.IsAssignee ? "Owner" : "Enrolled"
                                          }).ToList();
 
-        
+
             return userCourseMappingList;
         }
+
+        /// <summary>
+        /// To Get the Course Detail
+        /// </summary>
+        /// <param name="courseVM"></param>
+        /// <returns></returns>
+        public Course GetCourseById(string courseId)
+        {
+            if (courseId == "undefined" || string.IsNullOrEmpty(courseId)) return null;
+
+            var getCourse = _unitOfwork.CourseRepository.Get(new Guid(courseId));
+
+            if (getCourse == null)
+                return null;
+
+            return getCourse;
+
+        }
+
 
         /// <summary>
         /// Delete Course
@@ -116,7 +166,7 @@ namespace WorkChop.BusinessService.BusinessService
             try
             {
                 var getCourse = _unitOfwork.CourseRepository.Get(courseId);
-                
+
                 if (getCourse != null)
                 {
                     getCourse.DeletedOn = DateTime.UtcNow;
@@ -127,7 +177,7 @@ namespace WorkChop.BusinessService.BusinessService
                 }
                 return new BaseViewModel { HasError = true, ErrorMessage = "Course not found" };
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 return new BaseViewModel { HasError = true, ErrorMessage = ex.Message };
             }

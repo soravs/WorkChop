@@ -1,8 +1,9 @@
 ﻿import { Component, OnInit } from '@angular/core';
 import { Http, RequestOptions } from '@angular/http';
 import { Router } from '@angular/router';
-import { CourseServiceProxy } from '../../shared/service-proxies/service-proxies';
+import { CourseServiceProxy,AlertifyModals } from '../../shared/service-proxies/service-proxies';
 import { FilterPipe } from '../../shared/filter/pipe';
+
 
 @Component({
     selector: 'app-course-dashboard-route',
@@ -16,10 +17,16 @@ export class CourseDashboardComponent implements OnInit {
     public hideEnrolledDiv = true;
     courses: any = [];
     loggedInUserId: string;
-   
-    constructor(private _courseService: CourseServiceProxy, private _router: Router) {
+    private _alertfyVMModel: AlertfyVMModel;
+
+    constructor(
+        private _alertify: AlertifyModals,
+        private _courseService: CourseServiceProxy,
+        private _router: Router) {
         this.loggedInUserId = JSON.parse(localStorage.getItem('UserID'));
         this.courseVM = new CourseViewModel('');
+        this._alertfyVMModel = new AlertfyVMModel('','',"warning",true,'');
+        
     }
 
     ngOnInit() {
@@ -28,7 +35,6 @@ export class CourseDashboardComponent implements OnInit {
     
 
     getCourse(assignRoleId: number): void {
-        debugger;
         this.hideEnrolledDiv = true;
         this.temp = assignRoleId;
         this._courseService.getAllCourses(assignRoleId)
@@ -41,11 +47,12 @@ export class CourseDashboardComponent implements OnInit {
     }
 
     addNewCourse(): void {
+        
         this._courseService.addNewCourse(this.courseVM)
             .subscribe(result => {
                 if (result) {
                     // Need to redirect to the course setting page
-                    this.getCourse(1);
+                    this._router.navigate(['/course/setting/:'], { queryParams: { course_id: result.CourseId} });
                     this.courseVM = new CourseViewModel('');
                 } else {
                 }
@@ -54,46 +61,65 @@ export class CourseDashboardComponent implements OnInit {
     }
 
     deleteCourse(courseId: string): void {
-       
-        var result = confirm("Are you sure want to delete the course?");
-        if (result) {
-            this._courseService.deleteCourse(courseId)
-                .subscribe(result => {
-                    if (result.HasError) {
-                        alert(result.ErrorMessage);
-                        return;
-                    }
-                    this.getCourse(this.temp);
-                }, error => {
-                });
-        }
-
-       
+        var _self = this;
+        this._alertfyVMModel.title = "Are you sure want to delete the course?";
+        this._alertfyVMModel.text = "You won't be able to revert this!";
+        this._alertfyVMModel.confirmButtonText = "Delete";
+         this._alertify.Confirm(this._alertfyVMModel, function (isConfirmed) {
+            if (isConfirmed) {
+                _self._courseService.deleteCourse(courseId)
+                    .subscribe(result => {
+                        if (result.HasError) {
+                            return;
+                        }
+                        _self.getCourse(_self.temp);
+                    }, error => {
+                    });
+            }
+        });
+      
+        
     }
 
     leaveCourse(userCourseMappingId: string): void {
-        var result = confirm("Are you sure want to leave the course?");
-        if (result) {
-            this._courseService.leaveCourse(userCourseMappingId)
-                .subscribe(result => {
-                    if (result.HasError) {
-                        alert(result.ErrorMessage);
-                        return;
-                    }
-                    this.getCourse(this.temp);
-                }, error => {
-                });
-        }
+        var _self = this;
+        this._alertfyVMModel.title = "Are you sure want to leave the course?";
+        this._alertfyVMModel.text = "";
+        this._alertfyVMModel.confirmButtonText = "Delete";
+        this._alertify.Confirm(this._alertfyVMModel, function (isConfirmed) {
+            if (isConfirmed) {
+                _self._courseService.leaveCourse(userCourseMappingId)
+                    .subscribe(result => {
+                        if (result.HasError) {
+                            return;
+                        }
+                        _self.getCourse(_self.temp);
+                    }, error => {
+                    });
+            }
+        });
       
     }
 
-    getCourseSetting(courseId: string): void {
+    getCourseSetting(courseId: string, userType: string): void {
         debugger;
-        this._router.navigate(['/course/setting']);
+        this._router.navigate(['/course/setting/:'], { queryParams: { course_id: courseId } });
+        //this._router.navigate(['SettingComponent', { course_id: courseId, user_type: userType }]);
     }
 
 }
 
 export class CourseViewModel {
     constructor(public courseName: string) { }
+}
+
+export class AlertfyVMModel {
+    constructor(
+        public title: string,
+        public text: string,
+        public type: string,
+        public showCancelButton: boolean,
+        public confirmButtonText: string,
+
+    ) { }
 }

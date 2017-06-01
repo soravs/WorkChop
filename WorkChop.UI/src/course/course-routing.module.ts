@@ -11,7 +11,7 @@ import { AppRouteGuard } from '../shared/auth/auth-route-guard';
                 path: '',
                 component: CourseComponent,
                 children: [
-                    { path: 'setting', component: SettingComponent, canActivate: [AppRouteGuard] },
+                    { path: 'setting/:course_id', component: SettingComponent, canActivate: [AppRouteGuard] },
                 ]
             }
         ])

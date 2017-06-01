@@ -104,6 +104,7 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="protractor.conf.js" />
+    <Content Include="scripts\course.js" />
     <Content Include="src\account\account.component.css" />
     <Content Include="src\account\account.component.html" />
     <Content Include="src\app\app.component.css" />
@@ -112,6 +113,7 @@
     <Content Include="src\account\login\login.component.html" />
     <Content Include="src\app\course-dashboard\course-dashboard.component.css" />
     <Content Include="src\app\course-dashboard\course-dashboard.component.html" />
+    <Content Include="src\assets\images\Asset 1.png" />
     <Content Include="src\assets\images\Asset 4.png" />
     <Content Include="src\assets\images\bar-graph-active.svg" />
     <Content Include="src\assets\images\bar-graph.png" />
@@ -151,6 +153,8 @@
     <Content Include="src\assets\images\Background_Login2.jpg" />
     <Content Include="src\assets\images\workchoplogo.png" />
     <Content Include="src\index.html" />
+    <Content Include="src\main.css" />
+    <Content Include="src\menu.css" />
     <Content Include="src\styles.css" />
     <Content Include="e2e\tsconfig.e2e.json" />
     <Content Include="src\assets\.gitkeep" />

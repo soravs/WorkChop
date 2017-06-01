@@ -1,4 +1,4 @@
-.height-100px {
+/*.height-100px {
     height: 100px;
 }
 
@@ -13,13 +13,13 @@
 
 .p-13-25 {
     padding: 13px 25px !important;
-}
+}*/
 
-.profile-pic {
+/*.profile-pic {
     color: #003261 !important;
     font-size: 12px;
     font-family: 'Roboto-Medium';
-}
+}*/
 
 .login-dropdown .dropdown-menu:before {
     position: absolute;
@@ -199,9 +199,9 @@
     margin-left: 0px;
 }
 
-.padding-right-0 {
+/*.padding-right-0 {
     padding-right: 0;
-}
+}*/
 
 .Created-day {
     color: #9e9e9e;
@@ -210,9 +210,9 @@
     font-size: 12px;
 }
 
-.margin-top-20 {
+/*.margin-top-20 {
     margin-top: 20px !important;
-}
+}*/
 
 .course-container {
     cursor: pointer;
@@ -320,13 +320,13 @@
     font-family: 'Roboto-Medium';
 }
 
-.padding-top-25 {
+/*.padding-top-25 {
     padding-top: 25px;
 }
 
 .padding-top-75 {
     padding-top: 75px;
-}
+}*/
 
 button.close {
     color: #757575 !important;
@@ -341,13 +341,13 @@ button.close {
     line-height: 1.42857143;
 }
 
-.padding-15-30 {
+/*.padding-15-30 {
     padding: 15px 30px !important;
 }
 
 .padding-15 {
     padding: 15px !important;
-}
+}*/
 
 .modal-footer {
     border-top: none;
@@ -395,14 +395,14 @@ button.close {
     left: 20%;
 }
 
-.p-l-r-15 {
+/*.p-l-r-15 {
     padding-left: 15px;
     padding-right: 15px;
 }
 
 .margin-top-25 {
     margin-top: 25px;
-}
+}*/
 
 .plussetting {
     padding: 20px;
@@ -415,9 +415,9 @@ button.close {
     height: 100px;
 }
 
-#topbar .topbar-main {
+/*#topbar .topbar-main {
     background: #fff;
-}
+}*/
 
 #page-wrapper {
     background-color: #fff;

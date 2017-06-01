@@ -6,7 +6,9 @@ import * as ApiServiceProxies from './service-proxies';
     providers: [
         ApiServiceProxies.CourseServiceProxy,
         ApiServiceProxies.AuthenticationServiceProxy,
-        ApiServiceProxies.CustomExceptionHandlingServiceProxy
+        ApiServiceProxies.CustomExceptionHandlingServiceProxy,
+        //ApiServiceProxies.AlertfyVMModel,
+        ApiServiceProxies.AlertifyModals,
     ]
 })
 export class ServiceProxyModule { }

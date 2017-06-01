@@ -8,13 +8,14 @@ using WorkChop.Filters;
 
 namespace WorkChop.Controllers
 {
-    //[Authorize(Roles ="Teacher")]
+    [Authorize(Roles ="Student,Teacher")]
     [HandleApiException]
     [ValidateModel]
     [RoutePrefix("api/course")]
     public class CourseController : ApiController
     {
         private readonly ICourseService _courseService;
+      
 
         public CourseController(ICourseService courseService)
         {
@@ -35,6 +36,19 @@ namespace WorkChop.Controllers
         }
 
         /// <summary>
+        /// Method to update course detail
+        /// </summary>
+        /// <param name="course"></param>
+        /// <returns></returns>
+        [HttpPost]
+        [Route("updateCourse")]
+        public HttpResponseMessage UpdateCourse(Course course)
+        {
+            var res = _courseService.UpdateCourse(course);
+            return Request.CreateResponse(HttpStatusCode.Created, res);
+        }
+
+        /// <summary>
         /// Method to get course detail by assign role to user
         /// </summary>
         /// <param name="userId"></param>
@@ -47,6 +61,17 @@ namespace WorkChop.Controllers
             var res = _courseService.GetCoursesByFilter(userId, assigneeRoleId);
             return Request.CreateResponse(HttpStatusCode.Created, res);
         }
+
+
+        [HttpGet]
+        [Route("getCourseById")]
+        public HttpResponseMessage GetCourseById(string courseId)
+        {
+            var res = _courseService.GetCourseById(courseId);
+          
+            return Request.CreateResponse(HttpStatusCode.Created, res);
+        }
+
 
         /// <summary>
         ///  add user course mapping

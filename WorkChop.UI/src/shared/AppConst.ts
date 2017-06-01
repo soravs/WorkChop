@@ -18,3 +18,7 @@
         return data[value];
     }
 }
+export class ConstantValues
+{
+    public static CourseImage: string = "../../assets/images/Asset 4.png";
+}

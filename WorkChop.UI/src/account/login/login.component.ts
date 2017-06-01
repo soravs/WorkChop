@@ -32,7 +32,6 @@ export class LoginComponent implements OnInit {
         this._authenticationService.login(this.loginVM)
             .subscribe(result => {
                 if (result) {
-                    debugger;
                      this._router.navigate(['/app/course']);
 
                 } else {

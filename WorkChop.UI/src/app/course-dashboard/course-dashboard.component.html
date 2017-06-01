@@ -54,7 +54,7 @@
                         <div class="col-md-3 col-sm-6 margin-top-25" *ngFor="let course of courses | FilterPipe:searchCourseName">
                             <div class="row no-margin">
                                 <div class="col-md-12 course-container" [ngClass]="{'enrolled-container':course.UserType=='Enrolled'}">
-                                    <div  (click)="getCourseSetting(course.Fk_CourseId)">
+                                    <div  (click)="getCourseSetting(course.Fk_CourseId,course.UserType)">
                                         <div class="row no-margin">
                                             <div class="col-xs-3 padding-0 visible-xs">
                                                 <img class="addcourse-img" src="../../assets/images/Asset 4.png" />
@@ -116,20 +116,23 @@
                                     <button type="button" class="close" data-dismiss="modal"><img src="../../assets/images/CloseButton.svg" /></button>
                                     <h4 class="modal-title text-left white-modal-title">Create new course</h4>
                                 </div>
-                                <div class="modal-body text-left padding-15">
-                                    <form>
+                                <form (ngSubmit)="addNewCourse()" #courseForm="ngForm">
+                                    <div class="modal-body text-left padding-15">
+
                                         <div class="floating-group inline">
-                                            <label class="floating-group__label floating-group__label--empty" [ngClass]="{'floating-group__label--occupied':focus===true || courseVM.courseName!==''}">Subject course</label>
-                                            <input class="floating-group__input" [(ngModel)]="courseVM.courseName" (focus)="focus=true" (blur)="focus=false" name="emailAddress" required />
+                                            <label for="courseName">Subject course</label>
+                                            <input #courseName="ngModel" class="floating-group__input" [(ngModel)]="courseVM.courseName" (focus)="focus=true" (blur)="focus=false" name="courseName" required ng-required="Please fill the course name" />
                                             <span class="floating-group__bar"></span>
+                                            <!--<div [hidden]="courseName.valid || courseName.pristine " class="error">
+                                                Please fill the course name.
+                                            </div>-->
                                         </div>
-                                    </form>
-                                </div>
-                                <div class="modal-footer margin-top-30">
-                                    <a class="padding-0" (click)="addNewCourse()" data-dismiss="modal">
-                                        <div type="button" class="btn btn-green-full saveandsetup no-margin">CREATE</div>
-                                    </a>
-                                </div>
+
+                                    </div>
+                                    <div class="modal-footer margin-top-30">
+                                        <button type="submit" [disabled]="!courseForm.form.valid" data-dismiss="modal" (click)="addNewCourse()" class="btn btn-green-full saveandsetup no-margin">CREATE</button>
+                                    </div>
+                                </form>
                             </div>
                         </div>
                     </div>

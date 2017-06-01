@@ -1,10 +1,164 @@
-﻿<!DOCTYPE html>
-<html>
-<head>
-    <title></title>
-	<meta charset="utf-8" />
-</head>
-<body>
+﻿<div data-toggle="modal" data-target="#myModal-two" id="clickModal"></div>
+<div class="row no-margin visible-xs">
+    <div class="col-md-12 setting-container">
+        <button id="saveCourse" type="submit" class="btn btn-green-full btn-save mobile-width-100" (click)="updateCourse()">SAVE</button>
+        <a class="padding-0" href="overview_course-empty.html"> <div type="button" class="btn btn-gray mobile-width-100">CANCEL</div></a>
+    </div>
 
-</body>
-</html>
+
+</div>
+<form (ngSubmit)="updateCourse()" #courseDetailForm="ngForm">
+    <div class="setting-page">
+
+
+        <div *ngIf="errorMessage" class="alert alert-danger">{{errorMessage}}</div>
+        <div *ngIf="successMessage" class="alert alert-success">{{successMessage}}</div>
+        <div class="row no-margin">
+            <div class="col-md-8 padding-0">
+                <div class="row no-margin">
+                    <div class="col-md-12 col-sm-12">
+                        <div class="setting-section">Course setup</div>
+                        <p>
+                            Here you setup Your Course details. This is the first thing student see when they are invited to
+                            your course. Fill in the details below to build your detailed description of your course.
+                        </p>
+
+
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+        <div class="row no-margin">
+            <div class="col-md-8 col-xs-12 margin-bottom-30">
+                <div class="row no-margin">
+                    <div class="col-md-12 padding-0 margin-top-20">
+                        <div class="floating-group inline">
+                            <label>Name course</label>
+                            <input #courseName="ngModel" class="floating-group__input" [(ngModel)]="courseSettingVM.CourseName" name="CourseName" required />
+                            <span class="floating-group__bar"></span>
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="form-group margin-top-70">
+                    <label class="control-label col-md-12 padding-0" for="email">Description</label>
+                    <div class="col-md-12 padding-0">
+                        <textarea required class="form-control" rows="5" #Description="ngModel" name="Description" [(ngModel)]="courseSettingVM.Description"></textarea>
+                    </div>
+                </div>
+
+
+                <div class="row no-margin">
+                    <div class="col-md-8 padding-0 margin-top-20">
+                        <div class="floating-group inline margin-top-70">
+                            <label>Name teacher</label>
+                            <input class="floating-group__input" [(ngModel)]="courseSettingVM.Co_Teacher" name="Co_Teacher" />
+                            <span class="floating-group__bar"></span>
+                            <!--<angular2-multiselect [data]="dropdownList" [(ngModel)]="selectedItems" [settings]="dropdownSettings" (onSelect)="onItemSelect($event)" (onDeSelect)="OnItemDeSelect($event)"></angular2-multiselect>-->
+
+                        </div>
+                    </div>
+                    <div class="col-md-4 col-sm-12 text-center paid-text-left margin-top-80 padd-p-0">
+                        <div>
+                            <button class="btn btn-blue">ADD CO_TEACHER</button>
+                        </div>
+
+                    </div>
+                </div>
+
+                <div class="row no-margin margin-top-60">
+                    <div class="form-group">
+                        <label class="control-label col-md-12 padding-0" for="email">Course Image</label>
+                    </div>
+                    <div class="col-md-5 padding-0">
+                        <div class="course-part">
+                            <img [src]="courseSettingVM.ImageSrc" height="100" />
+                        </div>
+                    </div>
+                    <div class="col-md-3 pad-p-t-15">
+                        <p class="no-margin"><b>Required dimensions:</b></p>
+                        <p>400*600 pixels</p>
+                        <p class="no-margin"><b>Required format:</b></p>
+                        <p>.jpg, .jpeg or .png</p>
+                    </div>
+                    <div class="col-md-4 col-sm-12 text-center paid-text-left pad-p-t-15 fileUploader">
+
+                        <input if="fileUploader" type="file" accept=".jpg,.png,.jpeg" #file (change)="upload(file.files)">
+                        <input type="button" (click)="file.click()" class="btn btn-blue" value="UPLOAD IMAGE" />
+                        <div *ngIf="imageErrorMessage" class="alert alert-danger m-m-t-5">{{imageErrorMessage}}</div>
+                    </div>
+                </div>
+
+                <div class="floating-group inline margin-top-70 margin-bottom-30">
+                    <div class="form-group">
+                        <input required #Location="ngModel" id="address" name="Location" [(ngModel)]="courseSettingVM.Location" placeholder="Course location" autocorrect="off" autocapitalize="off" spellcheck="off" type="text" class="form-control">
+                    </div>
+                    <sebm-google-map [latitude]="latitude" [longitude]="longitude" [scrollwheel]="false" [zoom]="zoom">
+                        <sebm-google-map-marker [latitude]="latitude" [longitude]="longitude"></sebm-google-map-marker>
+                    </sebm-google-map>
+                </div>
+
+
+            </div>
+        </div>
+
+    </div>
+
+    <div class="row no-margin hidden-xs">
+        <div class="col-md-12 setting-container-end">
+            <button id="saveCourse" type="submit" [disabled]="!courseDetailForm.form.valid" class="btn btn-green-full btn-save mobile-width-100" (click)="updateCourse()">SAVE</button>
+            <a class="padding-0" href="overview_course-empty.html"> <div type="button" class="btn btn-gray mobile-width-100">CANCEL</div></a>
+        </div>
+    </div>
+</form>
+<div class="modal fade " id="myModal-two" role="dialog" bsModal #staticModal="bs-modal" [config]="{backdrop: 'static'}">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header blue-header">
+                <button type="button" class="close" (click)="staticModal.hide()"><img src="../../assets/images/CloseButton.svg" /></button>
+                <h4 class="modal-title text-left white-modal-title">Hoera! A course has been created</h4>
+            </div>
+            <div class="modal-body text-left padding-15">
+                <form>
+                    <div class="row no-margin">
+                        <div class="col-md-2 col-sm-2 col-xs-12 text-center">
+                            <img [src]="courseSettingVM.ImageSrc" height="90" class="text-center" />
+
+                        </div>
+                        <div class="col-md-10 col-sm-12 col-xs-12">
+                            <div class="floating-group inline">
+                                <label>Course name</label>
+                                <input readonly="readonly" class="floating-group__input" [(ngModel)]="courseSettingVM.CourseName" name="CourseName" requried />
+                                <span class="floating-group__bar"></span>
+                            </div>
+
+
+                        </div>
+                    </div>
+                    <div class="row no-margin">
+                        <div class="col-md-12 margin-top-30">
+                            <p class="no-margin">Your course is been created. Access all your courses at the overviewpage.</p>
+                            <p>You now can create agenda dates, content and much more!</p>
+                        </div>
+                    </div>
+                </form>
+                <div>
+                </div>
+            </div>
+
+            <div class="modal-footer margin-top-15 mobile-text-center">
+                <a class="padding-0" href="/app/course">
+                    <div type="button" class="btn btn-green-full btn-save no-margin mobile-margin-b-20 mobile-width-100">START CREATING CONTENT</div>
+                </a>
+                <a class="padding-0" href="/app/course">
+                    <div type="button" class="btn btn-red-border no-margin mobile-width-100">GO TO OVERVIEW</div>
+                </a>
+            </div>
+        </div>
+
+    </div>
+</div>
+

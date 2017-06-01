@@ -18,6 +18,14 @@ namespace WorkChop.DataModel.Models
         public DateTime UpdatedOn { get; set; }
         public DateTime? DeletedOn { get; set; }
 
-       
+        public string Description { get; set; }
+        public List<Guid> Co_Teacher { get; set; }
+
+        public string ImageSrc { get; set; }
+
+        public decimal? Latitude { get; set; }
+        public decimal? Longitude { get; set; }
+        public string Location { get; set; }
+
     }
 }

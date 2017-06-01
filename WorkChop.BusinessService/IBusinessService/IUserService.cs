@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using WorkChop.Common.ResponseViewModel;
 using WorkChop.Common.ViewModel;
@@ -14,5 +15,7 @@ namespace WorkChop.BusinessService.IBusinessService
         User Insert(User userVM);
         User GetByQuery(string email);
         UserResponseModel GetUserByRole(LoginViewModel loginVM);
+        List<UserRoleResponseModel> GetUserRoleByUserId(Guid UserId);
+        List<User> GetAllTeachers(string userId);
     }
 }
