@@ -29,52 +29,11 @@
 
         $button.on('click', toggleMenu);
 
-        //function floatingGroup(element) {
-        //    var label = $(element).find('.floating-group__label')[0];
-        //    var input = $(element).find('.floating-group__input')[0];
-
-        //    var $label = $(label);
-        //    var $input = $(input);
-
-        //    if (checkIfEmpty(input)) {
-        //        $label.addClass('floating-group__label--empty');
-        //    } else {
-        //        $label.addClass('floating-group__label--occupied');
-        //    }
-
-        //    $input.on('focus', function () {
-        //        $label.addClass('floating-group__label--occupied');
-        //    });
-
-        //    $input.on('focusout', function () {
-        //        if (checkIfEmpty(input)) {
-        //            $label.removeClass('floating-group__label--occupied');
-        //        }
-        //    });
 
 
-        //    function checkIfEmpty(inputField) {
-        //        if (inputField!=undefined && inputField.value === '') {
-        //            return true;
-        //        }
+        //$('.menu-item-con .main-one').addClass('active');
 
-        //        return false;
-        //    }
-        //}
-
-        //$('.floating-group').each(function (index, value) {
-          
-        //    if (value != undefined) {
-        //        var float = value;
-        //        float = floatingGroup(float);
-        //    }
-
-        //});
-
-
-        $('.menu-item-con .main-one').addClass('active');
-
-        //$('#simple-editor').trumbowyg();
+       
 
     })()
 

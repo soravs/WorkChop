@@ -22,4 +22,16 @@
 @media (min-width:767px)
 {
     .main-container{padding-left:250px;}
+     .content-page {
+        overflow-y: auto !important;
+        max-height: calc(95vh - 178px) !important;
+    }
+
+     .setting-page {
+        overflow-y: auto !important;
+        max-height: calc(100vh - 178px) !important;
+    }
+
+    
 }
+

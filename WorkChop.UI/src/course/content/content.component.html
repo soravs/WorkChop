@@ -1,0 +1,229 @@
+﻿<div class="row no-margin border-section" activeLink="isSubmenutwo">
+    <div class="col-md-6 col-sm-6 col-xs-12 padding-0 m-p-15-30">
+        <button *ngIf="isOwner" type="button" class="btn btn-default btn-green add-category" (click)="OpenCreateModal()">ADD CATEGORY</button>
+
+        <div class="modal fade category_modal" id="myModal" role="dialog" bsModal #staticModalCategory="bs-modal" [config]="{backdrop: 'static'}">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header  blue-header">
+                        <button type="button" class="close" (click)="staticModalCategory.hide()"><img src="../../assets/images/CloseButton.svg" /></button>
+                        <h4 class="modal-title text-left white-modal-title">Start new category</h4>
+                    </div>
+                    <form (ngSubmit)="addUpdateCategory()" #categoryForm="ngForm">
+                        <div class="modal-body text-left padding-15">
+
+                            <div class="floating-group inline">
+                                <label class="fields_labels" for="CategoryName">Category Name</label>
+                                <input #category_name  id="category_name" maxlength="25" #CategoryName="ngModel" class="floating-group__input" [(ngModel)]="categoryVM.CategoryName" name="CategoryName" required ng-required="Please fill the category name" />
+                                <span class="floating-group__bar"></span>
+
+                            </div>
+
+                        </div>
+                        <div class="modal-footer margin-top-30">
+                            <button type="submit" [disabled]="!categoryForm.form.valid" class="btn btn-green-full saveandsetup no-margin">CREATE</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6 col-sm-6 col-sm-6 col-xs-12 text-right padding-0 m-p-15-30 m-b-t-2">
+        <input class="input-box-search" placeholder="Search Content" type="text" [(ngModel)]="searchContentName">
+    </div>
+</div>
+
+<div *ngIf="categories.length==0;else category_content">
+    <div class="empty_data"> No Categories in this course</div>
+</div>
+
+<ng-template #category_content>
+
+    <div class="content-page" >
+        <div *ngFor="let category of categories">
+            <div class="row no-margin">
+                <div class="col-md-10 big-heading">
+                    <!--First session-->
+                    <div class="edit-input" *ngIf="isOwner; else label_category">
+                        <input maxlength="25" [readonly]="!isOwner" class="edit-icon" type="text" [ngModel]="category.CategoryName" debounce [delay]="1000" (func)="updateCategoryName(category.CategoryId,$event)" on-focus="setCategoryName($event)" />
+                    </div>
+                    <ng-template #label_category>
+                        <div class="file_name">{{category.CategoryName}}</div>
+                    </ng-template>
+                </div>
+                <div *ngIf="isOwner" class="col-md-2 remove_category big-heading clickable" (click)="deleteCategory(category.CategoryId)">
+                    <img src="../../assets/images/remove-icon.png" />
+                </div>
+            </div>
+
+            <div *ngIf="category.Contents.length==0 && !isOwner">
+                <div class="empty_data_contents"> No contents in this category</div>
+            </div>
+            <div class="inline-box">
+                <div class="row no-margin" *ngIf="isOwner">
+                    <div class="col-md-3 col-sm-6 col-xs-6 margin-top-25 boxsize">
+                        <div class="row no-margin">
+                            <div class="col-md-12 add-content-container text-center">
+                                <span class="clickable" (click)="openContentModal(category.CategoryId);">
+                                    <img class="margin-top-25" src="../../assets/images/plusiconanother.png" />
+                                    <div class="add-file">ADD CONTENT</div>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row no-margin">
+
+                    <div *ngFor="let content of category.Contents | ContentFilterPipe:searchContentName" class="col-md-3 col-sm-6 col-xs-6 margin-top-25 boxsize">
+                        <div class="row no-margin" *ngIf="isOwner || (!isOwner) && content.IsVisibleToAttendees">
+                            <div class="col-md-12 content-container">
+                                <div class="row no-margin">
+
+                                    <div class="col-md-12 col-sm-12 text-center padding-0 margin-top-20" [ngClass]="fileTypeColor(content)">
+                                        <span><i [class]="fileTypeIcons(content)"></i></span>
+                                        <div class="file_name">{{content.FileName}}</div>
+                                    </div>
+                                </div>
+                                <div class="content-container-hover hidden-xs">
+                                    <div class="col-md-12 col-sm-12 col-xs-12 padding-0 margin-top-20">
+                                        <a class="btn btn-green-full width-100 no-margin" [attr.href]="downloadFileLink(content)">DOWNLOAD</a>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-12 content-container-sub">
+                                <div class="row no-margin">
+                                    <div class="col-md-11 col-sm-11 col-xs-11 padding-0">
+                                        <div class="Created-day no-margin font-bold">{{content.ContentName}}</div>
+                                        <div class="Created-day no-margin"> Uploaded {{today | amDifference: content.CreatedOn :'days'}} days ago</div>
+                                    </div>
+                                    <div class="col-md-1 col-sm-1 col-xs-1 padding-0 text-right" *ngIf="isOwner;else content_Manipultaion">
+                                        <div class="dropdown">
+                                            <div class="dropdown-toggle dropdown-setting" data-toggle="dropdown">
+                                                <div class="fa-ellipsis"></div>
+                                            </div>
+                                            <ul class="dropdown-menu">
+                                                <li>
+                                                    <div type="button" class="btn btn-green-full margin-bottom-15 visible-xs" (click)="downloadFile(content)">DOWNLOAD</div>
+                                                    <div type="button" class="btn btn-edit" (click)="editContentModal(content,category.CategoryId)">EDIT</div>
+                                                    <a class="padding-0">
+                                                        <div type="button" class="btn btn-red" (click)="deleteContent(category.CategoryId,content.ContentId)">DELETE</div>
+                                                    </a>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                    <ng-template #content_Manipultaion>
+                                        <div class="col-md-1 col-sm-1 col-xs-1 padding-0 text-right visible-xs">
+                                            <div class="dropdown">
+                                                <div class="dropdown-toggle dropdown-setting" data-toggle="dropdown">
+                                                    <div class="fa-ellipsis"></div>
+                                                </div>
+                                                <ul class="dropdown-menu">
+                                                    <li>
+                                                        <div type="button" class="btn btn-green-full margin-bottom-15" (click)="downloadFile(content)">DOWNLOAD</div>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </ng-template>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="border col-md-12"></div>
+        </div>
+      
+    </div>
+
+</ng-template>
+
+<!--Modals-->
+<div class="modal fade content_modal" id="myModaltwo" role="dialog" bsModal #staticModalContent="bs-modal" [config]="{backdrop: 'static'}">
+    <div class="modal-dialog">
+        <!-- Modal content-->
+        <div class="modal-content modal-setting">
+            <div class="modal-header blue-header">
+
+                <button type="button" class="close" (click)="staticModalContent.hide()"><img src="../../assets/images/CloseButton.svg" /></button>
+                <h4 class="modal-title white-modal-title text-left">Upload new content</h4>
+            </div>
+            <form (ngSubmit)="add_updateContent()" #contentForm="ngForm" enctype="multipart/form-data" method="post">
+                <div class="modal-body text-left">
+
+                    <div class="padding-15">
+                        <div *ngIf="!isFileUploaded" class="row no-margin">
+                            <div class="col-sm-2 col-xs-12 padding-0">
+                                <p class="no-margin padding-top-8">Upload file</p>
+                            </div>
+
+                            <div class="col-sm-10 col-xs-12 padding-0 fileUploader">
+
+                                <input id="fileUploader" type="file" accept="*" #file (change)="upload(file.files)">
+                                <input type="button" (click)="file.click()" class="btn btn-green-full btn-add-file no-margin" value="ADD FILE" />
+                                <label [hidden]="!fileErrMsg" class="alert-warning">Max size to upload file is 50 MB</label>
+                            </div>
+                        </div>
+
+
+                        <div class="row no-margin">
+                            <div class="col-md-10 padding-0">
+                                <div class="floating-group inline">
+                                    <label  class="floating-group__label fields_labels">Subject content</label>
+                                    <input   #ContentName="ngModel" class="floating-group__input" [(ngModel)]="contentVM.ContentName" name="ContentName" required />
+                                    <span class="floating-group__bar"></span>
+                                </div>
+
+                            </div>
+                        </div>
+                        <div class="row no-margin" [hidden]="!isFileUploaded">
+                            <div class="col-md-10 padding-0">
+                                <div class="col-sm-2 col-xs-12 padding-0 margin-top-35">
+                                    <p class="no-margin padding-top-8">Upload file</p>
+                                </div>
+                                <div class="col-sm-10 col-xs-12 padding-0 margin-top-35">
+
+                                    <div class="file-section text-left min-width texleft">
+                                        <input readonly="readonly" #FileName="ngModel" class="uploaded_file_name" [(ngModel)]="contentVM.FileName" name="FileName" required />
+
+                                        <!--Herewillcome_the_name_ofthespecific_file.PNG  <b>(1,624K)</b>-->
+                                        <span class="pull-right" (click)="deleteUploadedFile()"><i class="fa fa-times"></i></span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <hr [hidden]="toUpdateContent" class="margin-top-35" />
+
+                    <div class="row no-margin padding-15 margin-top-5" [ngClass]="{'margin-top-5':toUpdateContent}">
+                        <div class="col-md-4 padding-0">
+                            <div class="checkbox checkbox-primary no-margin">
+                                <input name="contentVM.IsVisibleToAttendees" id="chkAttendees" type="checkbox" [checked]="contentVM.IsVisibleToAttendees" [(ngModel)]="contentVM.IsVisibleToAttendees.selected" (ngModelChange)="isVisibleToAttendeesChange($event)" />
+                                <label for="chkAttendees">
+                                    Visible for attendees?
+                                </label>
+                            </div>
+                        </div>
+                        <div class="col-md-6 padding-0 hideenrolled" [hidden]="!contentVM.IsVisibleToAttendees">
+                            <div class="checkbox checkbox-primary no-margin">
+                                <input name="contentVM.SendEmailToAttendees" id="chkSendEmail" type="checkbox" [checked]="contentVM.SendEmailToAttendees" [(ngModel)]="contentVM.SendEmailToAttendees.selected" (ngModelChange)="sendEmailToAttendeesChange($event)" />
+                                <label for="chkSendEmail">
+                                    Send mail to attendees
+                                </label>
+                            </div>
+                        </div>
+
+                    </div>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" [disabled]="!contentForm.form.valid" class="btn btn-green-full btn-Uploade no-margin">UPLOAD</button>
+                </div>
+            </form>
+
+        </div>
+    </div>
+</div>
+

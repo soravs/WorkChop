@@ -18,5 +18,6 @@ namespace WorkChop.Common.ViewModel
         public string CourseName { get; set; }
         public string UserType { get; set; }
         public double CourseCreatedDays { get; set; }
+        public string ImageSrc { get; set; }
     }
 }

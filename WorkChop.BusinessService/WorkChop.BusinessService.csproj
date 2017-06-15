@@ -36,6 +36,7 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Web" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -44,8 +45,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BusinessService\ContentService.cs" />
     <Compile Include="BusinessService\CourseService.cs" />
     <Compile Include="BusinessService\UserService.cs" />
+    <Compile Include="IBusinessService\IContentService.cs" />
     <Compile Include="IBusinessService\ICourseService.cs" />
     <Compile Include="IBusinessService\IUserService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

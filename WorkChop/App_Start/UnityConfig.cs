@@ -18,6 +18,7 @@ namespace WorkChop
             // e.g. container.RegisterType<ITestService, TestService>();
             container.RegisterType<IUserService, UserService>();
             container.RegisterType<ICourseService, CourseService>();
+            container.RegisterType<IContentService, ContentService>();
             GlobalConfiguration.Configuration.DependencyResolver = new UnityResolver(container);
         }
     }

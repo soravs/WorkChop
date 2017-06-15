@@ -1,15 +1,16 @@
-﻿<div data-toggle="modal" data-target="#myModal-two" id="clickModal"></div>
-<div class="row no-margin visible-xs">
+﻿
+
+<div class="row no-margin visible-xs" *ngIf="isOwner">
     <div class="col-md-12 setting-container">
-        <button id="saveCourse" type="submit" class="btn btn-green-full btn-save mobile-width-100" (click)="updateCourse()">SAVE</button>
-        <a class="padding-0" href="overview_course-empty.html"> <div type="button" class="btn btn-gray mobile-width-100">CANCEL</div></a>
+        <button [disabled]="!courseDetailForm.form.valid" id="saveCourse" type="submit" class="btn btn-green-full btn-save mobile-width-100" (click)="updateCourse()">SAVE</button>
+        <a class="padding-0" href="app/course"> <div type="button" class="btn btn-gray mobile-width-100">CANCEL</div></a>
     </div>
 
 
 </div>
 <form (ngSubmit)="updateCourse()" #courseDetailForm="ngForm">
     <div class="setting-page">
-
+       
 
         <div *ngIf="errorMessage" class="alert alert-danger">{{errorMessage}}</div>
         <div *ngIf="successMessage" class="alert alert-success">{{successMessage}}</div>
@@ -18,7 +19,7 @@
                 <div class="row no-margin">
                     <div class="col-md-12 col-sm-12">
                         <div class="setting-section">Course setup</div>
-                        <p>
+                        <p *ngIf="isOwner">
                             Here you setup Your Course details. This is the first thing student see when they are invited to
                             your course. Fill in the details below to build your detailed description of your course.
                         </p>
@@ -36,7 +37,7 @@
                     <div class="col-md-12 padding-0 margin-top-20">
                         <div class="floating-group inline">
                             <label>Name course</label>
-                            <input #courseName="ngModel" class="floating-group__input" [(ngModel)]="courseSettingVM.CourseName" name="CourseName" required />
+                            <input [readonly]="!isOwner" #courseName="ngModel" class="floating-group__input" [(ngModel)]="courseSettingVM.CourseName" name="CourseName" required />
                             <span class="floating-group__bar"></span>
                         </div>
                     </div>
@@ -45,25 +46,30 @@
 
                 <div class="form-group margin-top-70">
                     <label class="control-label col-md-12 padding-0" for="email">Description</label>
-                    <div class="col-md-12 padding-0">
-                        <textarea required class="form-control" rows="5" #Description="ngModel" name="Description" [(ngModel)]="courseSettingVM.Description"></textarea>
+                    <div class="col-md-12 padding-0" *ngIf="isOwner">
+                        <textarea style="display:none"  #Description="ngModel" name="Description" [(ngModel)]="courseSettingVM.Description" required></textarea>
+                        <app-tinymce  [(ngModel)]="courseSettingVM.Description" #Description="ngModel" name="Description"></app-tinymce>
                     </div>
+                    <div class="col-md-12 padding-0" *ngIf="!isOwner">
+                        <div id="description"></div>
+                    </div>
+                   
                 </div>
 
 
                 <div class="row no-margin">
                     <div class="col-md-8 padding-0 margin-top-20">
                         <div class="floating-group inline margin-top-70">
-                            <label>Name teacher</label>
-                            <input class="floating-group__input" [(ngModel)]="courseSettingVM.Co_Teacher" name="Co_Teacher" />
+                            <label>Name teacher</label> 
+                            <input [readonly]="!isOwner" class="floating-group__input" [(ngModel)]="courseSettingVM.Co_Teacher" name="Co_Teacher" />
                             <span class="floating-group__bar"></span>
                             <!--<angular2-multiselect [data]="dropdownList" [(ngModel)]="selectedItems" [settings]="dropdownSettings" (onSelect)="onItemSelect($event)" (onDeSelect)="OnItemDeSelect($event)"></angular2-multiselect>-->
 
                         </div>
                     </div>
-                    <div class="col-md-4 col-sm-12 text-center paid-text-left margin-top-80 padd-p-0">
+                    <div class="col-md-4 col-sm-12 text-center paid-text-left margin-top-80 padd-p-0" *ngIf="isOwner">
                         <div>
-                            <button class="btn btn-blue">ADD CO_TEACHER</button>
+                            <div class="btn btn-blue">ADD CO_TEACHER</div>
                         </div>
 
                     </div>
@@ -78,28 +84,37 @@
                             <img [src]="courseSettingVM.ImageSrc" height="100" />
                         </div>
                     </div>
-                    <div class="col-md-3 pad-p-t-15">
-                        <p class="no-margin"><b>Required dimensions:</b></p>
-                        <p>400*600 pixels</p>
-                        <p class="no-margin"><b>Required format:</b></p>
-                        <p>.jpg, .jpeg or .png</p>
-                    </div>
-                    <div class="col-md-4 col-sm-12 text-center paid-text-left pad-p-t-15 fileUploader">
+                    <div *ngIf="isOwner">
+                        <div class="col-md-3 pad-p-t-15">
+                            <p class="no-margin"><b>Required dimensions:</b></p>
+                            <p>400*600 pixels</p>
+                            <p class="no-margin"><b>Required format:</b></p>
+                            <p>.jpg, .jpeg or .png</p>
+                        </div>
+                        <div class="col-md-4 col-sm-12 text-center paid-text-left pad-p-t-15 fileUploader">
 
-                        <input if="fileUploader" type="file" accept=".jpg,.png,.jpeg" #file (change)="upload(file.files)">
-                        <input type="button" (click)="file.click()" class="btn btn-blue" value="UPLOAD IMAGE" />
-                        <div *ngIf="imageErrorMessage" class="alert alert-danger m-m-t-5">{{imageErrorMessage}}</div>
+                            <input if="fileUploader" type="file" accept=".jpg,.png,.jpeg" #file (change)="upload(file.files)">
+                            <input type="button" (click)="file.click()" class="btn btn-blue" value="UPLOAD IMAGE" />
+                            <div *ngIf="imageErrorMessage" class="alert alert-danger m-m-t-5">{{imageErrorMessage}}</div>
+                        </div>
                     </div>
                 </div>
 
                 <div class="floating-group inline margin-top-70 margin-bottom-30">
-                    <div class="form-group">
-                        <input required #Location="ngModel" id="address" name="Location" [(ngModel)]="courseSettingVM.Location" placeholder="Course location" autocorrect="off" autocapitalize="off" spellcheck="off" type="text" class="form-control">
+                    <div *ngIf="isOwner">
+                        <div class="form-group">
+                            <input [readonly]="!isOwner" required #Location="ngModel" id="address" name="Location" [(ngModel)]="courseSettingVM.Location" placeholder="Course location" autocorrect="off" autocapitalize="off" spellcheck="off" type="text" class="form-control">
+                        </div>
                     </div>
-                    <sebm-google-map [latitude]="latitude" [longitude]="longitude" [scrollwheel]="false" [zoom]="zoom">
-                        <sebm-google-map-marker [latitude]="latitude" [longitude]="longitude"></sebm-google-map-marker>
-                    </sebm-google-map>
-                </div>
+                    <div *ngIf="!isOwner">
+                        <label>
+                            {{courseSettingVM.Location}}
+                        </label>
+                        </div>
+                        <sebm-google-map [latitude]="latitude" [longitude]="longitude" [scrollwheel]="false" [zoom]="zoom">
+                            <sebm-google-map-marker [latitude]="latitude" [longitude]="longitude"></sebm-google-map-marker>
+                        </sebm-google-map>
+                    </div>
 
 
             </div>
@@ -107,10 +122,10 @@
 
     </div>
 
-    <div class="row no-margin hidden-xs">
+    <div class="row no-margin hidden-xs" *ngIf="isOwner">
         <div class="col-md-12 setting-container-end">
-            <button id="saveCourse" type="submit" [disabled]="!courseDetailForm.form.valid" class="btn btn-green-full btn-save mobile-width-100" (click)="updateCourse()">SAVE</button>
-            <a class="padding-0" href="overview_course-empty.html"> <div type="button" class="btn btn-gray mobile-width-100">CANCEL</div></a>
+            <button id="saveCourse" type="submit" [disabled]="!courseDetailForm.form.valid" class="btn btn-green-full btn-save mobile-width-100">SAVE</button>
+            <a class="padding-0" href="app/course"> <div type="button" class="btn btn-gray mobile-width-100">CANCEL</div></a>
         </div>
     </div>
 </form>
@@ -150,7 +165,7 @@
             </div>
 
             <div class="modal-footer margin-top-15 mobile-text-center">
-                <a class="padding-0" href="/app/course">
+                <a class="padding-0" (click)="NavigateToCourseContent();">
                     <div type="button" class="btn btn-green-full btn-save no-margin mobile-margin-b-20 mobile-width-100">START CREATING CONTENT</div>
                 </a>
                 <a class="padding-0" href="/app/course">

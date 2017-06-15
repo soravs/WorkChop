@@ -5,6 +5,7 @@ using System.Net.Http;
 using System.Web.Http;
 using WorkChop.App_Helper;
 using WorkChop.BusinessService.IBusinessService;
+using WorkChop.Common.Utils;
 using WorkChop.Common.ViewModel;
 using WorkChop.DataModel.Models;
 using WorkChop.Filters;
@@ -16,6 +17,7 @@ namespace WorkChop.Controllers
     [RoutePrefix("api/user")]
     public class UserController : ApiController
     {
+
         private readonly IUserService _userService;
 
         public UserController(IUserService userService)
@@ -78,10 +80,17 @@ namespace WorkChop.Controllers
             var user = _userService.GetUserByRole(objLoginViewModel);
             if (user.HasError) return Request.CreateErrorResponse(HttpStatusCode.NotFound, user.ErrorMessage);
 
-            if (user.Password != objLoginViewModel.Password)
+
+
+            var decryptedPassword = Security.Decrypt(user.Password, user.PasswordSalt);
+
+            if (!string.IsNullOrEmpty(decryptedPassword))
             {
-                user.ErrorMessage = "Password didn't match";
-                return Request.CreateErrorResponse(HttpStatusCode.NotAcceptable, user.ErrorMessage);
+                if (!decryptedPassword.Equals(objLoginViewModel.Password))
+                {
+                    user.ErrorMessage = "Password didn't match";
+                    return Request.CreateErrorResponse(HttpStatusCode.NotAcceptable, user.ErrorMessage);
+                }
             }
 
             var token = AuthToken.GetLoingInfo(objLoginViewModel);

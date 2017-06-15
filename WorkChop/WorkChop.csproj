@@ -292,6 +292,7 @@
     <Compile Include="Areas\HelpPage\SampleGeneration\SampleDirection.cs" />
     <Compile Include="Areas\HelpPage\SampleGeneration\TextSample.cs" />
     <Compile Include="Areas\HelpPage\XmlDocumentationProvider.cs" />
+    <Compile Include="Controllers\ContentController.cs" />
     <Compile Include="Controllers\CourseController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\UserController.cs" />
@@ -411,7 +412,11 @@
     <Content Include="Scripts\modernizr-2.6.2.js" />
     <Content Include="Scripts\respond.js" />
     <Content Include="Scripts\respond.min.js" />
-    <Content Include="Web.config" />
+    <Content Include="UploadedFiles\plunker url_6fd2d9bb-23b5-46a4-be14-b167f008da29_hjkhjkhjhjhkjhkjhkj.txt" />
+    <Content Include="UploadedFiles\WS.jpg" />
+    <Content Include="Web.config">
+      <SubType>Designer</SubType>
+    </Content>
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </Content>
@@ -426,6 +431,10 @@
     <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Views\Shared\Error.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />
+    <Content Include="UploadedFiles\not-available.png_6fd2d9bb-23b5-46a4-be14-b167f008da29_vjghj" />
+    <Content Include="UploadedFiles\SquirrelSetup.log_6fd2d9bb-23b5-46a4-be14-b167f008da29_ghjghjghjhgj" />
+    <Content Include="UploadedFiles\SquirrelSetup.log_6fd2d9bb-23b5-46a4-be14-b167f008da29_tee11" />
+    <Content Include="UploadedFiles\SquirrelSetup.log_cd84f046-94c9-4fb5-a8e5-803859743d3d_hjkhjkhjk" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

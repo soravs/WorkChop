@@ -12,7 +12,7 @@ namespace WorkChop.BusinessService.IBusinessService
         User Get(int userId);
         User Get(Guid userId);
         IQueryable<User> GetAll();
-        User Insert(User userVM);
+        UserResponseModel Insert(User userVM);
         User GetByQuery(string email);
         UserResponseModel GetUserByRole(LoginViewModel loginVM);
         List<UserRoleResponseModel> GetUserRoleByUserId(Guid UserId);

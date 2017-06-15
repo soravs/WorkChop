@@ -6,16 +6,25 @@ import { CourseComponent } from './course.component';
 import { CommonModule } from '@angular/common';
 import { AppRouteGuard } from '../shared/auth/auth-route-guard';
 import { SettingComponent } from './setting/setting.component';
+import { ContentComponent } from './content/content.component';
 import { ServiceProxyModule } from '../shared/service-proxies/service-proxy.module';
 import { AgmCoreModule } from "angular2-google-maps/core";
-import { AngularMultiSelectModule } from 'angular2-multiselect-dropdown/angular2-multiselect-dropdown';
-import { CKEditorModule, CKButtonDirective } from 'ng2-ckeditor';
 import { ModalModule } from 'ng2-bootstrap';
+import { ConstantValues } from "../../src/shared/AppConst";
+import { TinymceModule } from 'angular2-tinymce';
+import { BlockUIModule } from 'ng-block-ui';
+import { MomentModule } from 'angular2-moment';
+import { Debounce } from 'angular2-debounce';
+import { ContentFilterPipe } from '../shared/filter/CommonFilterPipe';
+
 
 @NgModule({
     declarations: [
          CourseComponent,
-        SettingComponent
+        SettingComponent,
+        ContentComponent,
+        Debounce,
+        ContentFilterPipe
     ],
     imports: [
         CommonModule,
@@ -24,12 +33,16 @@ import { ModalModule } from 'ng2-bootstrap';
         CourseRoutingModule,
         ServiceProxyModule,
         AgmCoreModule.forRoot({
-            apiKey: "AIzaSyA4KEetv4Mjtar6f-ioisyXcJ65HDjuqCY",
+            apiKey: ConstantValues.GoogleMapKey,
             libraries: ["places"]
         }),
-        AngularMultiSelectModule,
-        CKEditorModule,
+      
         ModalModule.forRoot(),
+        
+        TinymceModule.withConfig({
+        }),
+        BlockUIModule,
+        MomentModule
     ],
     providers: [
         AppRouteGuard

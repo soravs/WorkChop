@@ -6,6 +6,7 @@ using Microsoft.Owin.Security;
 using Microsoft.Owin.Security.OAuth;
 using WorkChop.BusinessService.IBusinessService;
 using WorkChop.BusinessService.BusinessService;
+using WorkChop.Common.Utils;
 
 namespace WorkChop.Providers
 {
@@ -32,11 +33,23 @@ namespace WorkChop.Providers
                 context.SetError("invalid_UserName");
                 return;
             }
-            if (!userManager.Password.Equals(context.Password))
+
+
+            var decryptedPassword = Security.Decrypt(userManager.Password, userManager.PasswordSalt);
+
+            if (!string.IsNullOrEmpty(decryptedPassword))
             {
-                context.SetError("invalid_Password");
-                return;
+                if (!decryptedPassword.Equals(context.Password))
+                {
+                    context.SetError("invalid_Password");
+                }
             }
+
+            //if (!userManager.Password.Equals(context.Password))
+            //{
+            //    context.SetError("invalid_Password");
+            //    return;
+            //}
 
             var getRolesOfUser = _userService.GetUserRoleByUserId(userManager.UserID);
 

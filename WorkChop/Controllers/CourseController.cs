@@ -8,7 +8,7 @@ using WorkChop.Filters;
 
 namespace WorkChop.Controllers
 {
-    [Authorize(Roles ="Student,Teacher")]
+    //[Authorize(Roles ="Student,Teacher")]
     [HandleApiException]
     [ValidateModel]
     [RoutePrefix("api/course")]
@@ -21,12 +21,14 @@ namespace WorkChop.Controllers
         {
             _courseService = courseService;
         }
-        
+
         /// <summary>
         /// Method to add new course detail
         /// </summary>
         /// <param name="course"></param>
         /// <returns></returns>
+        ///
+        [Authorize(Roles = "Teacher")]
         [HttpPost]
         [Route("addnewcourse")]
         public HttpResponseMessage AddNewCourse(Course course)
@@ -40,6 +42,8 @@ namespace WorkChop.Controllers
         /// </summary>
         /// <param name="course"></param>
         /// <returns></returns>
+        /// 
+        [Authorize(Roles = "Teacher")]
         [HttpPost]
         [Route("updateCourse")]
         public HttpResponseMessage UpdateCourse(Course course)
@@ -72,6 +76,23 @@ namespace WorkChop.Controllers
             return Request.CreateResponse(HttpStatusCode.Created, res);
         }
 
+        [HttpGet]
+        [Route("isCourseOwner")]
+        public HttpResponseMessage IsCourseOwner(string userId, string courseId)
+        {
+            var res = _courseService.IsCourseOwner(new Guid(userId),new Guid (courseId));
+
+            return Request.CreateResponse(HttpStatusCode.Created, res);
+        }
+
+        [HttpPost]
+        [Route("isCourseExist")]
+        public HttpResponseMessage IsCourseExist(Course courseDetail)
+        {
+            var res = _courseService.IsCourseExist(courseDetail);
+
+            return Request.CreateResponse(HttpStatusCode.Created, res);
+        }
 
         /// <summary>
         ///  add user course mapping
@@ -92,6 +113,8 @@ namespace WorkChop.Controllers
         /// <param name="courseId"></param>
         /// <returns></returns>
         /// 
+
+        [Authorize(Roles = "Teacher")]
         [HttpGet]
         [Route("deletecourse")]
         public HttpResponseMessage DeleteCourse(string courseId)
@@ -104,6 +127,8 @@ namespace WorkChop.Controllers
         /// </summary>
         /// <param name="usercourseMappingId"></param>
         /// <returns></returns>
+        /// 
+        [Authorize(Roles = "Student,Teacher")]
         [HttpGet]
         [Route("leavecourse")]
         public HttpResponseMessage LeaveCourse(string usercourseMappingId)

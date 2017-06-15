@@ -1,26 +1,31 @@
-﻿<div id="wrapper">
+﻿
+<div id="wrapper">
     <div class="page-content">
         <div class="row no-margin">
             <div class="col-md-12 overview-container">OVERVIEW COURSES</div>
         </div>
         <div class="row no-margin serach-container">
             <div class="col-md-6 col-sm-6 text-right pull-right">
-                <input class="input-box-search" placeholder="Search Course" type="text" [(ngModel)]="searchCourseName"/>
+                <input class="input-box-search" placeholder="Search Course" type="text" [(ngModel)]="searchCourseName" />
             </div>
         </div>
     </div>
     <div class="row no-margin course-menu">
         <div id="sidebar" role="navigation" class="navbar-default navbar-static-side">
             <ul class="nav nav-pills row no-margin menu-mobile">
-                <li class="col-md-12 col-sm-12 col-xs-3 padding-0 active"><a data-toggle="pill" (click)="getCourse(1)" data-target="#all">ALL</a></li>
-                <li class="col-md-12 col-sm-12 col-xs-4 padding-0"><a data-toggle="pill" (click)="getCourse(3)" data-target="#all">YOUR COURSES</a></li>
-                <li class="col-md-12 col-sm-12 col-xs-5 padding-0"><a data-toggle="pill" (click)="getCourse(2)" data-target="#enrolledcourse">ENROLLED COURSES</a></li>
+                <li class="col-md-12 col-sm-12 col-xs-3 padding-0 active"><a data-toggle="pill" (click)="getCourse(All)" data-target="#all">ALL</a></li>
+                <li class="col-md-12 col-sm-12 col-xs-4 padding-0" *ngIf="hideCourses"><a data-toggle="pill" (click)="getCourse(Self)" data-target="#all">YOUR COURSES</a></li>
+                <li class="col-md-12 col-sm-12 col-xs-5 padding-0"><a data-toggle="pill" (click)="getCourse(Enrolled)" data-target="#enrolledcourse">ENROLLED COURSES</a></li>
             </ul>
         </div>
         <div id="page-wrapper">
             <div class="tab-content m-p-l-r-10 p-l-r-15 course-page">
                 <div id="all" class="tab-pane fade in active">
                     <div class="row no-margin">
+                        <div *ngIf="!hideEnrolledDiv && courses.length==0;">
+                            <div class="empty_data"> No Courses.</div>
+                        </div>
+
                         <div class="col-md-3 col-sm-6 margin-top-25" *ngIf="hideEnrolledDiv">
                             <div class="row no-margin">
                                 <div class="col-md-12 add-course-container">
@@ -44,17 +49,18 @@
                                         </div>
                                     </div>
                                     <div class="row no-margin">
-                                        <div class="col-md-12 text-center padding-0 clickable hidden-xs margin-top-35-desk" data-toggle="modal" data-target="#myModal">
+                                        <div class="col-md-12 text-center padding-0 clickable hidden-xs margin-top-35-desk" (click)="openCreateModal()">
                                             <img class="" src="../../assets/images/plusicon.svg" />
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                        <div class="col-md-3 col-sm-6 margin-top-25" *ngFor="let course of courses | FilterPipe:searchCourseName">
+
+                        <div class="col-md-3 col-sm-6 margin-top-25" *ngFor="let course of courses | CourseFilter:searchCourseName">
                             <div class="row no-margin">
                                 <div class="col-md-12 course-container" [ngClass]="{'enrolled-container':course.UserType=='Enrolled'}">
-                                    <div  (click)="getCourseSetting(course.Fk_CourseId,course.UserType)">
+                                    <div (click)="getCourseSetting(course.Fk_CourseId,course.UserType)">
                                         <div class="row no-margin">
                                             <div class="col-xs-3 padding-0 visible-xs">
                                                 <img class="addcourse-img" src="../../assets/images/Asset 4.png" />
@@ -75,7 +81,8 @@
                                         </div>
                                         <div class="row no-margin">
                                             <div class="col-md-12 col-sm-12 hidden-xs text-center padding-0 height-100px margin-top-20">
-                                                <img class="addcourse-img" src="../../assets/images/Asset 4.png" />
+                                                <!--<img class="addcourse-img" src="../../assets/images/Asset 4.png" />-->
+                                                <img class="addcourse-img" [src]="course.ImageSrc" />
                                             </div>
 
                                         </div>
@@ -109,11 +116,12 @@
                             </div>
                         </div>
                     </div>
-                    <div class="modal fade" id="myModal" role="dialog">
+
+                    <div class="modal fade" id="myModal" role="dialog" bsModal #staticModal="bs-modal" [config]="{backdrop: 'static'}">
                         <div class="modal-dialog">
                             <div class="modal-content">
                                 <div class="modal-header  blue-header">
-                                    <button type="button" class="close" data-dismiss="modal"><img src="../../assets/images/CloseButton.svg" /></button>
+                                    <button type="button" class="close" (click)="staticModal.hide()"><img src="../../assets/images/CloseButton.svg" /></button>
                                     <h4 class="modal-title text-left white-modal-title">Create new course</h4>
                                 </div>
                                 <form (ngSubmit)="addNewCourse()" #courseForm="ngForm">
@@ -121,23 +129,21 @@
 
                                         <div class="floating-group inline">
                                             <label for="courseName">Subject course</label>
-                                            <input #courseName="ngModel" class="floating-group__input" [(ngModel)]="courseVM.courseName" (focus)="focus=true" (blur)="focus=false" name="courseName" required ng-required="Please fill the course name" />
+                                            <input #courseName="ngModel" class="floating-group__input" [(ngModel)]="courseVM.courseName" name="courseName" required ng-required="Please fill the course name" />
                                             <span class="floating-group__bar"></span>
-                                            <!--<div [hidden]="courseName.valid || courseName.pristine " class="error">
-                                                Please fill the course name.
-                                            </div>-->
+
                                         </div>
 
                                     </div>
                                     <div class="modal-footer margin-top-30">
-                                        <button type="submit" [disabled]="!courseForm.form.valid" data-dismiss="modal" (click)="addNewCourse()" class="btn btn-green-full saveandsetup no-margin">CREATE</button>
+                                        <button type="submit" [disabled]="!courseForm.form.valid" class="btn btn-green-full saveandsetup no-margin">CREATE</button>
                                     </div>
                                 </form>
                             </div>
                         </div>
                     </div>
                 </div>
-                
+
             </div>
         </div>
     </div>

@@ -4,6 +4,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using WorkChop.BusinessService.IBusinessService;
 using WorkChop.Common.ResponseViewModel;
+using WorkChop.Common.Utils;
 using WorkChop.Common.ViewModel;
 using WorkChop.DataModel.Models;
 using WorkChop.DataModel.Repository;
@@ -54,12 +55,27 @@ namespace WorkChop.BusinessService.BusinessService
         /// </summary>
         /// <param name="userVM"></param>
         /// <returns></returns>
-        public User Insert(User userVM)
+        public UserResponseModel Insert(User userVM)
         {
+            var isUserExists = GetByQuery(userVM.Email);
+            var userData = new UserResponseModel();
+            if (isUserExists != null)
+            {
+               
+                userData.HasError = true;
+                userData.ErrorMessage = "Email Already registered";
+                return userData;
+            }
+               
             userVM.UserID = new Guid();
             userVM.CreatedOn = DateTime.UtcNow;
             userVM.UpdatedOn = DateTime.UtcNow;
-            
+
+            string saltKey = Security.CreateSalt();
+
+            userVM.PasswordSalt = saltKey;
+            userVM.Password = Security.Encrypt(userVM.Password, saltKey);
+
             _unitOfwork.UserRepository.Add(userVM);
 
             var userRoleMapping = new UserRoleMapping()
@@ -70,7 +86,14 @@ namespace WorkChop.BusinessService.BusinessService
                 Fk_RoleId = (int)UserRoleEnum.Teacher
             };
             _unitOfwork.UserRoleRelationRepository.Add(userRoleMapping);
-            return userVM;
+
+
+
+            AutoMapper.Mapper.CreateMap<User, UserResponseModel>();
+            userData.HasError = false;
+            userData.ErrorMessage = string.Empty;
+
+            return userData;
         }
 
         /// <summary>
@@ -80,6 +103,7 @@ namespace WorkChop.BusinessService.BusinessService
         /// <returns></returns>
         public User GetByQuery(string email)
         {
+            //return _unitOfwork.UserRepository.GetByQuery(x => x.Email.ToLower(), email.ToLower());
             return _unitOfwork.UserRepository.GetByQuery(x => x.Email, email);
         }
 
@@ -96,7 +120,7 @@ namespace WorkChop.BusinessService.BusinessService
             var getUserData = (from user in _unitOfwork.UserRepository.GetAll()
                                join roleRelation in _unitOfwork.UserRoleRelationRepository.GetAll() on user.UserID equals roleRelation.Fk_UserId
                                join role in _unitOfwork.UserRoleRepository.GetAll() on roleRelation.Fk_RoleId equals role.RoleId
-                               where user.Email == loginVM.UserName
+                               where user.Email == loginVM.UserName 
                                select new { UserResponseModel = user, RoleResponseModel = role }).ToList();
 
             if (getUserData.Count > 0)
@@ -118,16 +142,12 @@ namespace WorkChop.BusinessService.BusinessService
             userData.ErrorMessage = "User not found";
             return userData;
         }
-        /// <summary>
-        /// Get User Role By User Id
-        /// </summary>
-        /// <param name="UserId"></param>
-        /// <returns></returns>
+
         public List<UserRoleResponseModel> GetUserRoleByUserId(Guid UserId)
         {
             try
             {
-                var getUserRoles = _unitOfwork.UserRoleRelationRepository.GetAll().Where(x => x.Fk_UserId == UserId).ToList();
+                var getUserRoles = _unitOfwork.UserRoleRelationRepository.GetDbSet(x => x.Fk_UserId == UserId).ToList();
                 AutoMapper.Mapper.CreateMap<UserRoleMapping, UserRoleResponseModel>();
                 var userRoleData = AutoMapper.Mapper.Map<List<UserRoleMapping>, List<UserRoleResponseModel>>(getUserRoles);
                 return userRoleData;

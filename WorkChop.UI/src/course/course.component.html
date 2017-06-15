@@ -14,34 +14,37 @@
         </div>
         <div class="menu-con">
             <div class="menu-item-con">
-                <a href="/course/setting" class="text-decoration-none">
-                    <div class="menu-item-head main-one">
+                <a  (click)="navigateToCourseSettings()" class="text-decoration-none">
+                    <div class="menu-item-head main-one" id="main-one" [ngClass]="{'active':isMainmenuOne}">
                         <i class="fa fa-circle-o font-12 no-margin"></i> <span class="name-icon">COURSE HOMEPAGE</span>
                     </div>
                 </a>
                 <div class="menu-item-body">
-                    <div class="menu-item-con submenu-one">
+                    <div class="menu-item-con submenu-one" id="submenu-one" [ngClass]="{'active':isSubmenuOne}">
                         <a href="agenda.html" class="menu-item-head agenda-name"><i class="agenda-icon"></i>AGENDA</a>
                     </div>
-                    <div class="menu-item-con submenu-two">
-                        <a href="Content_course_empty.html" class="menu-item-head content-name"><i class="content-icon"></i>CONTENT</a>
+                    <div  class="menu-item-con submenu-two" id="submenu-two" [ngClass]="{'active':isSubmenuTwo}">
+                        <a  (click)="navigateToCourseContent()" class="menu-item-head content-name"><i class="content-icon"></i>CONTENT</a>
                     </div>
-                    <div class="menu-item-con submenu-three">
+                   
+
+                    <div class="menu-item-con submenu-three" id="submenu-three" [ngClass]="{'active':isSubmenuThree}">
                         <a href="announcement_empty.html" class="menu-item-head announcement-name"><i class="announcement-icon"></i>ANNOUNCEMENTS</a>
 
                     </div>
-                    <div class="menu-item-con submenu-four">
+                    <div class="menu-item-con submenu-four" id="submenu-four" [ngClass]="{'active':isSubmenuFour}">
                         <a href="question_main.html" class="menu-item-head question-name"><i class="question-icon"></i>QUESTION</a>
                     </div>
-                    <div class="menu-item-con submenu-five">
+                    <div class="menu-item-con submenu-five" id="submenu-five" [ngClass]="{'active':isSubmenuFive}">
                         <a href="survey_main.html" class="menu-item-head survey-name"><i class="survey-icon"></i>SURVEY</a>
                     </div>
                 </div>
-                <div *ngIf="isOwner" >
-                    <div class="menu-item-head main-two margin-top-15">
+                <!--<div *ngIf="isOwner" >-->
+                <div id="owner_Menu_Section">
+                    <div class="menu-item-head main-two margin-top-15" id="main-two" [ngClass]="{'active':isMainmenuTwo}">
                         <a href="attendees_course_empty.html" class="menu-item-head attendee-name"><i class="fa fa-circle-o font-12 no-margin"></i>ATTENDEE</a>
                     </div>
-                    <div class="menu-item-head main-three">
+                    <div class="menu-item-head main-three" id="main-three" [ngClass]="{'active':isMainmenuThree}">
                         <a href="analysis_course_active.html" class="menu-item-head analysis-name"><i class="fa fa-circle-o font-12 no-margin"></i>ANALYSIS</a>
                     </div>
                 </div>
@@ -62,7 +65,7 @@
 
 
                 <li class="dropdown user-drop-down">
-                    <a class="dropdown-toggle top-bar-icon" href="#" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                    <a class="dropdown-toggle top-bar-icon" href="/account/login" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
                     
                         <i>
                             <img src="../assets/images/logoimage.png" />
@@ -78,7 +81,7 @@
                                     Bram Billiet
                                 </div>
                                 <div class="col-md-6 col-sm-6 col-xs-12 padding-0 text-right m-m-t-5">
-                                    <a href="loginpage.html" class="padding-0"> <div type="button" class="btn btn-red btn-logo">LOG OUT</div></a>
+                                    <a href="/account/login" class="padding-0"> <div type="button" class="btn btn-red btn-logo">LOG OUT</div></a>
                                 </div>
                             </div>
                         </li>
@@ -93,11 +96,13 @@
             </ul>
         </div>
     </div>
-
+    <block-ui>
+        <!-- Your app markup here -->
+    </block-ui>
     <div class="">
         <div class="row no-margin">
-            <div class="col-md-12 demo-container">
-                Demo Course
+            <div class="col-md-12 demo-container" id="SelectedCourseName">
+              
             </div>
         </div>
         <router-outlet></router-outlet>   

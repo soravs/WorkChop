@@ -1,10 +1,10 @@
 ﻿import { Pipe, PipeTransform } from '@angular/core';
 
 @Pipe({
-    name:'FilterPipe'
+    name:'CourseFilter'
 })
 
-export class FilterPipe implements PipeTransform {
+export class CourseFilter implements PipeTransform {
     transform(value: any, input: string) {
         if (input) {
             input = input.toLowerCase();

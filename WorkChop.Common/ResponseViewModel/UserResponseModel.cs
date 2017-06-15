@@ -14,6 +14,7 @@ namespace WorkChop.Common.ResponseViewModel
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public string Password { get; set; }
+        public string PasswordSalt { get; set; }
         public Nullable<Guid> CreatedBy { get; set; }
         public List<RoleResponseModel> RoleResponseModel { get; set; }
         public AccessToken TokenModel { get; set; }

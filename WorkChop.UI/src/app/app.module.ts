@@ -8,14 +8,16 @@ import { CourseDashboardComponent } from './course-dashboard/course-dashboard.co
 import { AppRouteGuard } from '../shared/auth/auth-route-guard';
 import { ServiceProxyModule } from '../shared/service-proxies/service-proxy.module'
 import { ModalModule } from 'ng2-bootstrap';
-import { FilterPipe } from '../shared/filter/pipe';
+import { CourseFilter } from '../shared/filter/pipe';
+import { TinymceModule } from 'angular2-tinymce';
+import { BlockUIModule } from 'ng-block-ui';
 
 @NgModule({
     declarations: [
         AppComponent,
         CourseDashboardComponent,
-        FilterPipe,
-        
+        CourseFilter,
+       
     ],   
     imports: [
         FormsModule,
@@ -24,6 +26,9 @@ import { FilterPipe } from '../shared/filter/pipe';
         AppRoutingModule,
         ServiceProxyModule,
         ModalModule.forRoot(),
+        TinymceModule.withConfig({
+        }),
+        BlockUIModule
     ],
     providers: [
         AppRouteGuard,

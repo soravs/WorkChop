@@ -28,6 +28,11 @@ namespace WorkChop.DataModel.Repository
         /// User Role Relation Repository
         /// </summary>
         IRepository<UserRoleMapping> UserRoleRelationRepository { get; }
+
+        /// <summary>
+        /// Error Log Repository
+        /// </summary>
+        IRepository<ErrorLog> ErrorLogRepository { get; }
         #endregion
     }
 }

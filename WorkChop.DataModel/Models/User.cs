@@ -17,6 +17,9 @@ namespace WorkChop.DataModel.Models
         public string LastName { get; set; }
         [Required]
         public string Password { get; set; }
+
+        public string PasswordSalt { get; set; }
+
         public bool IsActive { get; set; }
         public DateTime CreatedOn { get; set; }
         public Nullable<Guid> CreatedBy { get; set; }

@@ -52,6 +52,9 @@ namespace WorkChop.DataModel.Repository
             return _collection.FindOneById(id);
         }
 
+       
+      
+
         ///<summary>  
         /// Get all records   
         ///</summary>  
@@ -133,5 +136,7 @@ namespace WorkChop.DataModel.Repository
             MongoCursor<TEntity> cursor = _collection.Find(query);
             return cursor.AsQueryable<TEntity>();
         }
+
+       
     }
 }

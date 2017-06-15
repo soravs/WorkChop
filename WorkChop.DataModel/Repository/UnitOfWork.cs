@@ -26,6 +26,8 @@ namespace WorkChop.DataModel.Repository
 
         protected IRepository<UserRoleMapping> _userRoleMapping;
 
+        protected IRepository<ErrorLog> _ErrorLog;
+
         #endregion
 
         #region Methods
@@ -76,6 +78,15 @@ namespace WorkChop.DataModel.Repository
         public IRepository<UserCourseMapping> UserCourseMappingRepository
         {
             get { return _userCourseMapping ?? (_userCourseMapping = new Repository<UserCourseMapping>(_database, "UserCourseMapping")); }
+        }
+
+
+        /// <summary>
+        /// Error Log Repository
+        /// </summary>
+        public IRepository<ErrorLog> ErrorLogRepository
+        {
+            get { return _ErrorLog ?? (_ErrorLog = new Repository<ErrorLog>(_database, "ErrorLog")); }
         }
         #endregion
     }

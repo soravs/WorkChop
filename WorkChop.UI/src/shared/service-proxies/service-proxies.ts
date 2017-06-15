@@ -1,9 +1,12 @@
 ﻿import 'rxjs/Rx';
 import { Observable } from 'rxjs/Observable';
 import { Injectable, Inject, Optional, OpaqueToken } from '@angular/core';
-import { Http, Headers, Response, RequestOptionsArgs } from '@angular/http';
+import { Http, Headers, Response, RequestOptionsArgs, RequestOptions } from '@angular/http';
+import { Router, ActivatedRoute } from '@angular/router';
 import { Config } from '../../shared/AppConst';
 import swal from 'sweetalert2';
+import { BlockUI, NgBlockUI } from 'ng-block-ui';
+
 
 export const API_BASE_URL = Config.getEnvironmentVariable('endPoint');
 
@@ -51,7 +54,7 @@ export class AuthenticationServiceProxy {
         localStorage.removeItem('currentUser');
         localStorage.removeItem('UserID');
         localStorage.removeItem('userRoles');
-        
+
     }
 }
 
@@ -60,8 +63,8 @@ export class CourseServiceProxy {
     private currentUser = JSON.parse(localStorage.getItem('currentUser'));
 
     private ApiCalls: APICallsServiceProxy;
-    constructor(private _http: Http) {
-        this.ApiCalls = new APICallsServiceProxy(_http);
+    constructor(private _http: Http,private _router:Router) {
+        this.ApiCalls = new APICallsServiceProxy(_http, _router);
     }
 
     getAllCourses(assignRoleId: number): Observable<any> {
@@ -69,11 +72,20 @@ export class CourseServiceProxy {
         return this.ApiCalls.GetAjaxCall(url_);
     }
 
-
+    isCourseOwner(userId: string, courseId: string): Observable<boolean> {
+        let url_ = API_BASE_URL + "/api/course/isCourseOwner?userId=" + userId + "&courseId=" + courseId;
+        return this.ApiCalls.GetAjaxCall(url_);
+    }
     getCourseById(courseId: string): Observable<any> {
         let url_ = API_BASE_URL + "/api/course/getCourseById?courseId=" + courseId;
         return this.ApiCalls.GetAjaxCall(url_);
     }
+    isCourseExist(courseVM: any): Observable<any> {
+        let url = API_BASE_URL + "/api/course/isCourseExist";
+        courseVM.createdBy = this.currentUser.userId;
+        return this.ApiCalls.PostAjaxCall(courseVM, url);
+    }
+
     addNewCourse(courseVM: any): Observable<any> {
         let url = API_BASE_URL + "/api/course/addnewcourse";
         courseVM.createdBy = this.currentUser.userId;
@@ -91,7 +103,7 @@ export class CourseServiceProxy {
     }
 
     UpdateCourse(courseVM: any): Observable<any> {
-          let url = API_BASE_URL + "/api/course/updateCourse";
+        let url = API_BASE_URL + "/api/course/updateCourse";
         courseVM.createdBy = this.currentUser.userId;
         return this.ApiCalls.PostAjaxCall(courseVM, url);
     }
@@ -102,7 +114,67 @@ export class CourseServiceProxy {
     }
 }
 
+
+@Injectable()
+export class CategoryServiceProxy {
+    private currentUser = JSON.parse(localStorage.getItem('currentUser'));
+
+    private ApiCalls: APICallsServiceProxy;
+    constructor(private _http: Http, private _router: Router) {
+        this.ApiCalls = new APICallsServiceProxy(_http, _router);
+    }
+
+    ///Categories functions
+    addUpdateCategory(categoryVM: any): Observable<any> {
+        let url = API_BASE_URL + "/api/content/addupdatecategory";
+        return this.ApiCalls.PostAjaxCall(categoryVM, url);
+    }
+
+    isCategoryExist(categoryVM: any): Observable<any> {
+        let url = API_BASE_URL + "/api/content/iscategoryexist";
+        return this.ApiCalls.PostAjaxCall(categoryVM, url);
+    }
+    getAllCategories(courseId: any): Observable<any> {
+        let url = API_BASE_URL + "/api/content/getcategories?courseId=" + courseId + "&userId=" + this.currentUser.userId;
+        return this.ApiCalls.GetAjaxCall(url);
+    }
+
+    deleteCategory(categoryVM: any): Observable<any> {
+        let url = API_BASE_URL + "/api/content/deletecategory";
+        return this.ApiCalls.PostAjaxCall(categoryVM, url);
+    }
+    /////////
+
+    //////Content functions
+    add_updateContent(contentVM: any): Observable<any> {
+        let url = API_BASE_URL + "/api/content/addupdatecontent";
+        return this.ApiCalls.PostAjaxCall(contentVM, url);
+    }
+
+    isContentExist(contentVM: any): Observable<any> {
+        let url = API_BASE_URL + "/api/content/iscontentexist";
+        return this.ApiCalls.PostAjaxCall(contentVM, url);
+    }
+
+    deleteContent(contentVM: any): Observable<any> {
+        let url = API_BASE_URL + "/api/content/deletecontent";
+        return this.ApiCalls.PostAjaxCall(contentVM, url);
+    }
+
+    postFile(formData: any): Observable<any> {
+        let url = API_BASE_URL + "/api/content/addupdatecontent";
+        return this.ApiCalls.PostAjaxCallToUploadFile(formData, url);
+
+    }
+}
+
+@Injectable()
 export class CustomExceptionHandlingServiceProxy {
+    @BlockUI() blockUI: NgBlockUI;
+
+    constructor(private _http: Http, private _router: Router) {
+        
+    }
     protected jsonParseReviver: (key: string, value: any) => any = undefined;
 
     public processGetCurrentLoginInformations(response: Response): any {
@@ -119,10 +191,12 @@ export class CustomExceptionHandlingServiceProxy {
                 localStorage.removeItem('currentUser');
                 localStorage.removeItem('UserID');
                 localStorage.removeItem('userRoles');
+                this._router.navigate(['/account/login']);
                 return errData401.Message;
             }
         }
         else {
+            this.blockUI.stop();
             let errData = responseText === "" ? null : JSON.parse(responseText, this.jsonParseReviver);
             //this.throwException("An unexpected server error occurred.", status, responseText);
             console.log(errData.Message);
@@ -137,26 +211,34 @@ export class CustomExceptionHandlingServiceProxy {
 
 }
 
-export class APICallsServiceProxy
-{
+
+
+export class APICallsServiceProxy {
+    @BlockUI() blockUI: NgBlockUI;
+
     private currentUser = JSON.parse(localStorage.getItem('currentUser'));
     private headers = new Headers({
-        "Authorization": "bearer " + (this.currentUser === null ? '' : this.currentUser.token)
+        "Authorization": "bearer " + (this.currentUser === null ? '' : this.currentUser.token),
+
     });
 
     private customExceptionHandling: CustomExceptionHandlingServiceProxy;
-    constructor(private _http: Http) {
-        this.customExceptionHandling = new CustomExceptionHandlingServiceProxy();
+    constructor(private _http: Http, private _router: Router) {
+        this.customExceptionHandling = new CustomExceptionHandlingServiceProxy(_http,_router);
     }
 
-    GetAjaxCall(url_: any): Observable<any>
-    {
+    GetAjaxCall(url_: any): Observable<any> {
+        this.blockUI.start();
         return this._http.request(url_, {
             method: 'get',
             headers: this.headers
         }).map((response) => {
+
+            this.blockUI.stop();
             return this.customExceptionHandling.processGetCurrentLoginInformations(response);
         }).catch((response: any, caught: any) => {
+
+            this.blockUI.stop();
             if (response instanceof Response) {
                 try {
                     return Observable.of(this.customExceptionHandling.processGetCurrentLoginInformations(response));
@@ -169,14 +251,18 @@ export class APICallsServiceProxy
     }
 
     PostAjaxCall(dataModel: any, url_: string): Observable<any> {
-        debugger;
+        this.blockUI.start();
         return this._http.request(url_, {
             method: 'post',
             body: dataModel,
             headers: this.headers
         }).map((response) => {
+
+            this.blockUI.stop();
             return this.customExceptionHandling.processGetCurrentLoginInformations(response);
         }).catch((response: any, caught: any) => {
+
+            this.blockUI.stop();
             if (response instanceof Response) {
                 try {
                     return Observable.of(this.customExceptionHandling.processGetCurrentLoginInformations(response));
@@ -188,13 +274,39 @@ export class APICallsServiceProxy
         });
     }
 
+    PostAjaxCallToUploadFile(dataModel: any, url_: string): Observable<any> {
+        this.blockUI.start();
+
+        let options = new RequestOptions({ headers: this.headers });
+
+        return this._http.post(url_, dataModel, options)
+            .map((response) => {
+
+                this.blockUI.stop();
+                return this.customExceptionHandling.processGetCurrentLoginInformations(response);
+            }).catch((response: any, caught: any) => {
+
+                this.blockUI.stop();
+                if (response instanceof Response) {
+                    try {
+                        return Observable.of(this.customExceptionHandling.processGetCurrentLoginInformations(response));
+                    } catch (e) {
+                        return <Observable<any>><any>Observable.throw(response);
+                    }
+                } else
+                    return <Observable<any>><any>Observable.throw(response);
+            });
+    }
+
 }
+
+
 
 
 @Injectable()
 export class AlertifyModals {
 
-    Confirm(AlertfyVMModel: any,callback) {
+    Confirm(AlertfyVMModel: any, callback) {
         let status = false;
         swal({
             title: AlertfyVMModel.title,
@@ -205,13 +317,40 @@ export class AlertifyModals {
             confirmButtonClass: 'btn btn-success',
             cancelButtonClass: 'btn btn-danger',
         }).then(function () {
-            callback(true); 
+            callback(true);
         }, function (dismiss) {
             callback(false);
         });
 
     }
+    SimpleAlert(message: string) {
+        swal(message);
+    }
 }
+
+
+export enum Roles {
+    Teacher = 1,
+    Student = 2,
+    Admin = 3
+}
+
+export enum AssigneeRole {
+    All = 1,
+    Enrolled = 2,
+    Self = 3
+}
+
+
+export enum FileTypes {
+    All = 1,
+    Enrolled = 2,
+    Self = 3
+}
+
+
+
+
 //@Injectable()
 //export class AlertfyVMModel {
 //    constructor(

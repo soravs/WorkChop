@@ -19,11 +19,42 @@
     font-family: 'Roboto-Bold';
     src: url('assets/font/Roboto-Bold.ttf') format('truetype');
 }
+/******scrollbar css****/
+::-webkit-scrollbar
+{
+  width: 6px;  /* for vertical scrollbars */
+  height: 12px; /* for horizontal scrollbars */
+ 
+}
+
+::-webkit-scrollbar-track
+{
+  background: rgba(0, 0, 0, 0.1);
+}
+
+::-webkit-scrollbar-thumb
+{
+  background: rgba(0, 0, 0, 0.5);
+   border-radius:10px;
+}
+
+/**********/
+
+
+.empty_data{
+    font-size: 30px;
+    color: #4a49fb;
+    vertical-align: middle;
+    text-align: center;
+    margin-top: 100px;
+}
 
 
 /*****Confirmation boxes*********/
+
 .swal2-modal h2 {
     font-size: 20px;
+    line-height:35px;
 }
 .swal2-modal .swal2-styled,.swal2-modal {
     border-radius: 20px;
@@ -353,6 +384,18 @@
 
 .orange {
     color: #f5a623 !important;
+}
+.see_green{
+      color: #1fa67a !important;
+}
+.pdf_color{
+    color:  #fd4049 !important; 
+}
+.audio_file{
+    color:rgb(243, 111, 58) !important;
+}
+.octect_file{
+    color:rgba(58, 71, 243, 0.6) !important;
 }
 
 .margin-top-15 {
@@ -1039,6 +1082,10 @@ border: 1px solid #DDD;
     margin-top: 20px !important;
 }
 
+.focus {
+    border: 2px solid #AA88FF;
+    background-color: #FFEEAA;
+}
 .course-container {
     cursor: pointer;
     border: 1px solid #dadfeb;
@@ -1827,7 +1874,7 @@ label
 
 .edit-icon:hover, .edit-icon:focus {
 
-    /*background: url('assets/images/edit-icon.PNG') no-repeat !important;*/
+    background: url('assets/images/edit.png') no-repeat right;
     padding-right: 33px !important;
 }
 

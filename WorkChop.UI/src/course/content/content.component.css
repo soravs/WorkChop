@@ -1,0 +1,49 @@
+﻿body {
+}
+
+.remove_category img {
+    width: 30%;
+}
+
+input[type=file] {
+    display: none !important;
+}
+
+.uploaded_file_name {
+    width: auto;
+    border: 0px;
+    background-color:#F5F5F5 !important
+}
+
+.empty_data_contents {
+    font-size: 20px;
+    color: #4a49fb;
+    vertical-align: middle;
+    text-align: center;
+    margin-top: 80px;
+}
+
+.file_name {
+    width: auto;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.fields_labels {
+   
+    font-size: 12px;
+
+}
+
+ .floating-group.inline {
+    margin-top: 11px !important;
+}
+
+.margin-top-5{
+    margin-top:5px !important;
+}
+
+
+
+   

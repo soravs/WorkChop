@@ -1,8 +1,24 @@
-﻿#wrapper{
-    width:100%;
-    min-height:100%;
+﻿#wrapper {
+    width: 100%;
+    min-height: 100%;
 }
 
 .white-modal-title {
     color: #fff !important;
+}
+
+@media (min-width:767px) {
+
+    .tab-content {
+        overflow-y: auto !important;
+        max-height: calc(100vh - 185px) !important;
+    }
+
+    body {
+        overflow-y: hidden !important;
+    }
+
+    #sidebar {
+        min-height: calc(100vh - 178px) !important;
+    }
 }

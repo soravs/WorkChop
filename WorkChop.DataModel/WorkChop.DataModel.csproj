@@ -63,6 +63,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Models\Course.cs" />
+    <Compile Include="Models\ErrorLog.cs" />
     <Compile Include="Models\UserCourseMapping.cs" />
     <Compile Include="Models\UserRole.cs" />
     <Compile Include="Models\UserRoleMapping.cs" />

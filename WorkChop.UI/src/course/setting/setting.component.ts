@@ -1,13 +1,13 @@
 ﻿import { FormControl } from "@angular/forms";
-import { ElementRef, NgZone, NgModule, Component, OnInit, ViewChild } from '@angular/core';
+import { ElementRef, NgZone, NgModule, Component, OnInit, ViewChild, Input, Pipe } from '@angular/core';
 import { Http, RequestOptions } from '@angular/http';
 import { Router, ActivatedRoute } from '@angular/router';
-import { CourseServiceProxy } from '../../shared/service-proxies/service-proxies';
+import { CourseServiceProxy, AlertifyModals } from '../../shared/service-proxies/service-proxies';
 import { MapsAPILoader } from 'angular2-google-maps/core';
-import { CKEditorModule } from 'ng2-ckeditor';
 import { } from '@types/googlemaps';
 import { ConstantValues } from '../../shared/AppConst';
 import { ModalDirective } from 'ng2-bootstrap/ng2-bootstrap';
+import { TinymceModule } from 'angular2-tinymce';
 
 
 export const CourseDefaultImage = ConstantValues.CourseImage;
@@ -15,16 +15,17 @@ export const CourseDefaultImage = ConstantValues.CourseImage;
 @Component({
     selector: 'setting-dashboard-route',
     templateUrl: './setting.component.html',
-    styleUrls: ['./setting.component.css', '../course.component.css']
+    styleUrls: ['./setting.component.css', '../course.component.css'],
+
 })
 export class SettingComponent implements OnInit {
     course_id: any;
-    user_type: string;
-
+    isOwner: boolean;
+  
     //For Modal
     @ViewChild('staticModal') public staticModal: ModalDirective;
 
-    //For Ng-AutoCOmplete
+    //For Ng-AutoComplete
     public latitude: number;
     public longitude: number;
     public searchControl: FormControl;
@@ -47,45 +48,22 @@ export class SettingComponent implements OnInit {
     private courseSettingVM: CourseSettingViewModel;
     loggedInUserId: string;
 
-    constructor( private activatedRoute: ActivatedRoute,
+
+    constructor(
+        private tinymce: TinymceModule,
+        private _alertify: AlertifyModals,
+        private activatedRoute: ActivatedRoute,
         private mapsAPILoader: MapsAPILoader,
-        private ngZone: NgZone, private _courseService: CourseServiceProxy, private _router: Router)
-    {
+        private ngZone: NgZone,
+        private _courseService: CourseServiceProxy,
+        private _router: Router) {
         this.loggedInUserId = JSON.parse(localStorage.getItem('UserID'));
-        this.courseSettingVM = new CourseSettingViewModel('', '', '', '', CourseDefaultImage, '', 0, 0, true);
-        this.GetAllTeachers();
-       
+        this.courseSettingVM = new CourseSettingViewModel('', '', '', '', CourseDefaultImage, '', 0, 0);
+     //   this.GetAllTeachers();
+        this.checkIfUserLoggedIn();
     }
 
     ngOnInit() {
-
-        this.dropdownList = [
-            { "id": 1, "itemName": "India" },
-            { "id": 2, "itemName": "Singapore" },
-            { "id": 3, "itemName": "Australia" },
-            { "id": 4, "itemName": "Canada" },
-            { "id": 5, "itemName": "South Korea" },
-            { "id": 6, "itemName": "Germany" },
-            { "id": 7, "itemName": "France" },
-            { "id": 8, "itemName": "Russia" },
-            { "id": 9, "itemName": "Italy" },
-            { "id": 10, "itemName": "Sweden" }
-        ];
-        this.selectedItems = [
-            { "id": 2, "itemName": "Singapore" },
-            { "id": 3, "itemName": "Australia" },
-            { "id": 4, "itemName": "Canada" },
-            { "id": 5, "itemName": "South Korea" }
-        ];
-        this.dropdownSettings = {
-            singleSelection: false,
-            text: "Select Teachers",
-            selectAllText: 'Select All',
-            unSelectAllText: 'UnSelect All',
-            enableSearchFilter: true
-        };  
-
-
 
         //set google maps defaults
         this.zoom = 4;
@@ -96,17 +74,10 @@ export class SettingComponent implements OnInit {
         this.activatedRoute.queryParams.subscribe(
             params => this.course_id = params['course_id']);
 
-        this.getCourseById();
+        this.isCourseOwner();
+
     }
 
-    onItemSelect(item) {
-        console.log('Selected Item:');
-        console.log(item);
-    }
-    OnItemDeSelect(item) {
-        console.log('De-Selected Item:');
-        console.log(item);
-    }
 
     //Initialize Auto Complete and Google map
     private InitializeMap() {
@@ -159,23 +130,26 @@ export class SettingComponent implements OnInit {
         this.latitude = this.courseSettingVM.Latitude;
         this.longitude = this.courseSettingVM.Longitude;
         this.zoom = 12;
-        //if (this.latitude != 0 || this.longitude != 0 )
-        //{
-        //    if ("geolocation" in navigator) {
-        //        navigator.geolocation.getCurrentPosition((position) => {
-        //            this.latitude = position.coords.latitude;
-        //            this.longitude = position.coords.longitude;
-        //            this.zoom = 12;
-        //        });
-        //    }
-        //}
+    }
 
+    //To Check if Course if for owner or enrolled
+    isCourseOwner(): void {
+        this._courseService.isCourseOwner(this.loggedInUserId["userId"], this.course_id).subscribe(result => {
+            this.isOwner = result;
+
+            var toDeleteSection = document.getElementById('owner_Menu_Section');
+            if (!result && toDeleteSection != null)
+                toDeleteSection.remove();
+
+            this.getCourseById();
+        });
     }
 
     //Bind the course details on page
     getCourseById(): void {
         this._courseService.getCourseById(this.course_id).subscribe(result => {
             if (result) {
+                document.getElementById("SelectedCourseName").innerText= result.CourseName+" Course";
                 this.courseSettingVM.CourseId = this.course_id;
                 this.courseSettingVM.CourseName = result.CourseName;
                 this.courseSettingVM.Description = result.Description;
@@ -184,6 +158,9 @@ export class SettingComponent implements OnInit {
                 this.courseSettingVM.Location = result.Location;
                 this.courseSettingVM.Latitude = result.Latitude;
                 this.courseSettingVM.Longitude = result.Longitude;
+                if (!this.isOwner) {
+                    document.getElementById("description").innerHTML = this.courseSettingVM.Description;
+                }
             }
             else {
                 this.errorMessage = 'No Record Found';
@@ -200,31 +177,38 @@ export class SettingComponent implements OnInit {
     //To Update the course detail in database
     updateCourse(): void {
         this.successMessage = '';
-        if (!this.courseSettingVM.Status) {
-            this.errorMessage = 'Please fill the course details carefully !';
-            window.scroll(0, 0);
-            return;
-        }
-        this._courseService.UpdateCourse(this.courseSettingVM)
-            .subscribe(result => {
-                if (result) {
-                    this.successMessage = "Course updated successfully !";
-                    window.scroll(0, 0);
-                    this.staticModal.show();
-                    return;
-                } else {
-                    this.errorMessage = 'Please try again !';
-                    window.scroll(0, 0);
-                }
-            }, error => {
-                this.errorMessage = error.json().Message;
-                window.scroll(0, 0);
-            });
+
+        let _self = this;
+        _self.isCourseExists(function (data) {
+            if (!data) {
+                _self._courseService.UpdateCourse(_self.courseSettingVM)
+                    .subscribe(result => {
+                        if (result) {
+                            _self.successMessage = "Course updated successfully !";
+                            window.scroll(0, 0);
+                            _self.staticModal.show();
+                            return;
+                        } else {
+                            _self.errorMessage = 'Please try again !';
+                            window.scroll(0, 0);
+                        }
+                    }, error => {
+                        _self.errorMessage = error.json().Message;
+                        window.scroll(0, 0);
+                    });
+            } else {
+                _self._alertify.SimpleAlert("Course Name already exists");
+                //  window.scroll(0, 0);
+            }
+
+        });
+
+
     }
 
     //On Uploading the Course Image Validate Image and display uploaded image
     upload(event): void {
-        this.courseSettingVM.Status = true;
+
         let _self = this;
 
         _self.imageErrorMessage = "";
@@ -247,12 +231,11 @@ export class SettingComponent implements OnInit {
                     var width = image.width;
                     if (height > 600 || width > 400) {
                         _self.imageErrorMessage = "Choose the image in correct dimention. Otherwise Previous Image will be used to save.";
-                       // _self.courseSettingVM.Status = false;
                     }
                     else {
                         _self.courseSettingVM.ImageSrc = image.src;
                         _self.imageErrorMessage = "";
-                        _self.courseSettingVM.Status = true;
+
                     }
 
                 };
@@ -261,7 +244,7 @@ export class SettingComponent implements OnInit {
         }
         else if (event.length > 0) {
             _self.imageErrorMessage = "Please Upload the file in Correct format. Otherwise Previous Image will be used to save.";
-            //_self.courseSettingVM.Status = false;
+
         }
     }
 
@@ -269,7 +252,7 @@ export class SettingComponent implements OnInit {
     GetAllTeachers(): void {
         this._courseService.getAllTeachers(this.loggedInUserId["userId"]).subscribe(result => {
             if (result) {
-                debugger;
+
             }
             else {
 
@@ -280,6 +263,27 @@ export class SettingComponent implements OnInit {
         });
     }
 
+    NavigateToCourseContent(): void {
+        
+        this._router.navigate(['/course/content/:'], { queryParams: { course_id: this.course_id } });
+        
+    }
+
+    isCourseExists(callback): void {
+        this._courseService.isCourseExist(this.courseSettingVM)
+            .subscribe(data => {
+                callback(data);
+            }, error => {
+                callback(false);
+            });
+    }
+
+    checkIfUserLoggedIn(): void {
+        var currentUser = JSON.parse(localStorage.getItem('currentUser'));
+        if (currentUser == null || currentUser == undefined) {
+            this._router.navigate(['/account/login']);
+        }
+    }
 }
 
 
@@ -294,7 +298,7 @@ export class CourseSettingViewModel {
         public ImageSrc: string,
         public Location: string,
         public Latitude: number,
-        public Longitude: number,
-        public Status: boolean
+        public Longitude: number
+
     ) { }
 }

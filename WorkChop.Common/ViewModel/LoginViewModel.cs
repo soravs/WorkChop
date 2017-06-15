@@ -16,6 +16,8 @@ namespace WorkChop.Common.ViewModel
         public string Password { get; set; }
 
         public int? RoleId { get; set; }
+
+        public string PasswordSalt { get; set; }
     }
   
 }
