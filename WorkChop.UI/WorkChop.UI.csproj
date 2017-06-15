@@ -181,6 +181,7 @@
     <Content Include="src\assets\font\Roboto-Light.ttf" />
     <Content Include="src\assets\font\Roboto-Medium.ttf" />
     <Content Include="src\assets\font\roboto.regular.ttf" />
+    <Content Include="buildspec.yml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
